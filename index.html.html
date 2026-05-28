@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akashic - Web3 Academy, DeFi & ZK-Identity</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        akashic: {
+                            50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc',
+                            400: '#38bdf8', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1',
+                            800: '#075985', 900: '#0c4a6e', 950: '#082f49',
+                        },
+                        dark: {
+                            900: '#0f172a', 800: '#1e293b', 700: '#334155',
+                        }
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .glass-panel {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.9) 100%);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .text-glow { text-shadow: 0 0 20px rgba(14, 165, 233, 0.5); }
+        .hidden-tab { display: none; }
+        .active-tab { display: block; animation: fadeIn 0.3s ease-in-out; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #notification-modal {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            opacity: 0; pointer-events: none;
+            transform: translateY(-20px) translateX(-50%);
+        }
+        #notification-modal.show {
+            opacity: 1; pointer-events: auto;
+            transform: translateY(0) translateX(-50%);
+        }
+    </style>
+</head>
+<body class="bg-dark-900 text-slate-300 font-sans antialiased overflow-x-hidden selection:bg-akashic-500 selection:text-white min-h-screen flex flex-col">
+
+    <div class="fixed inset-0 w-full h-full z-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] rounded-full bg-akashic-900/30 mix-blend-screen filter blur-[100px] animate-blob"></div>
+        <div class="absolute top-[20%] right-[-10%] w-[35vw] h-[35vw] rounded-full bg-purple-900/20 mix-blend-screen filter blur-[100px] animate-blob animation-delay-2000"></div>
+        <div class="absolute bottom-[-20%] left-[20%] w-[45vw] h-[45vw] rounded-full bg-blue-900/20 mix-blend-screen filter blur-[120px] animate-blob animation-delay-4000"></div>
+    </div>
+
+    <nav class="fixed w-full z-50 glass border-b border-dark-700/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer" onclick="switchTab('dashboard')">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-akashic-400 to-akashic-600 flex items-center justify-center shadow-lg shadow-akashic-500/20">
+                        <i class="fa-solid fa-infinity text-white text-xl"></i>
+                    </div>
+                    <span class="font-display font-bold text-2xl text-white tracking-tight">Akashic</span>
+                </div>
+
+                <!-- Navigation Tabs (Localized dynamically) -->
+                <div class="hidden md:flex space-x-6 items-center">
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-item text-white border-b-2 border-akashic-500 px-1 py-2 text-sm font-medium transition-colors data-i18n="navDashboard">Tổng Quan</button>
+                    <button onclick="switchTab('knowledge')" id="nav-knowledge" class="nav-item text-slate-400 hover:text-white border-b-2 border-transparent hover:border-slate-600 px-1 py-2 text-sm font-medium transition-colors" data-i18n="navKnowledge">Kiến Thức</button>
+                    <button onclick="switchTab('swap')" id="nav-swap" class="nav-item text-slate-400 hover:text-white border-b-2 border-transparent hover:border-slate-600 px-1 py-2 text-sm font-medium transition-colors" data-i18n="navSwap">DeFi (Giao Dịch)</button>
+                    <button onclick="switchTab('identity')" id="nav-identity" class="nav-item text-slate-400 hover:text-white border-b-2 border-transparent hover:border-slate-600 px-1 py-2 text-sm font-medium transition-colors" data-i18n="navIdentity">Xác Thực (Identity)</button>
+                </div>
+
+                <!-- Action Controls (Language + Wallet) -->
+                <div class="flex items-center gap-3">
+                    <!-- Language Selector Switcher -->
+                    <div class="flex items-center bg-dark-800/80 rounded-lg p-1 border border-dark-700">
+                        <button onclick="setLanguage('vi')" id="lang-vi-btn" class="px-2.5 py-1 text-xs font-bold rounded transition-all bg-akashic-600 text-white">VI</button>
+                        <button onclick="setLanguage('en')" id="lang-en-btn" class="px-2.5 py-1 text-xs font-bold rounded transition-all text-slate-400 hover:text-slate-200">EN</button>
+                    </div>
+
+                    <!-- Wallet button -->
+                    <button id="connect-wallet-btn" onclick="toggleWalletConnection()" class="bg-akashic-600 hover:bg-akashic-500 text-white px-5 py-2.5 rounded-lg font-medium transition-all shadow-[0_0_15px_rgba(14,165,233,0.3)] hover:shadow-[0_0_25px_rgba(14,165,233,0.5)] flex items-center gap-2 relative overflow-hidden group">
+                        <span class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
+                        <i class="fa-solid fa-wallet relative z-10"></i>
+                        <span id="wallet-address-text" class="relative z-10" data-i18n="connectWalletBtn">Kết Nối Ví</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="notification-modal" class="fixed top-24 left-1/2 z-[100] glass px-6 py-4 rounded-xl border border-akashic-500/30 flex items-center gap-4 shadow-xl">
+        <div id="noti-icon" class="w-8 h-8 rounded-full bg-akashic-500/20 text-akashic-400 flex items-center justify-center">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <div>
+            <h4 id="noti-title" class="text-white font-medium text-sm">Thành công</h4>
+            <p id="noti-message" class="text-slate-400 text-xs mt-0.5">Thao tác đã hoàn tất.</p>
+        </div>
+    </div>
+
+    <main class="flex-grow pt-28 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full relative z-10">
+        
+        <!-- ==================== TAB TỔNG QUAN (DASHBOARD) ==================== -->
+        <div id="tab-dashboard" class="active-tab space-y-8">
+            <div class="text-center py-8 lg:py-12">
+                <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 tracking-tight leading-tight" id="hero-title">
+                    Cổng Thông Tin <span class="text-transparent bg-clip-text bg-gradient-to-r from-akashic-400 to-blue-600 text-glow">Web3 Đột Phá</span>
+                </h1>
+                <p class="text-slate-400 max-w-2xl mx-auto text-lg mb-8" data-i18n="heroSubtitle">
+                    Akashic giúp bạn làm chủ kiến thức Crypto, trải nghiệm tài chính phi tập trung (DeFi) và bảo vệ dữ liệu cá nhân qua công nghệ xác thực Zero-Knowledge.
+                </p>
+                <div class="flex justify-center gap-4">
+                    <button onclick="switchTab('knowledge')" class="px-6 py-3 rounded-lg bg-white/10 hover:bg-white/20 text-white font-medium transition-colors border border-white/10 flex items-center gap-2">
+                        <i class="fa-solid fa-book-open"></i> <span data-i18n="btnLearn">Học Crypto</span>
+                    </button>
+                    <button onclick="switchTab('identity')" class="px-6 py-3 rounded-lg bg-akashic-600/20 hover:bg-akashic-600/30 text-akashic-400 font-medium transition-colors border border-akashic-500/30 flex items-center gap-2">
+                        <i class="fa-solid fa-fingerprint"></i> <span data-i18n="btnVerify">Trải nghiệm Xác Thực</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-panel p-6 rounded-2xl">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-green-500/10 text-green-400 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <div>
+                            <p class="text-slate-400 text-sm font-medium" data-i18n="statTVL">TVL Hệ Sinh Thế</p>
+                            <h3 class="text-2xl font-display font-bold text-white">$142.5M</h3>
+                        </div>
+                    </div>
+                    <div class="w-full bg-dark-700 h-1.5 rounded-full mt-4">
+                        <div class="bg-green-400 h-1.5 rounded-full" style="width: 65%"></div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6 rounded-2xl">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <div>
+                            <p class="text-slate-400 text-sm font-medium" data-i18n="statStudents">Học Viên Hoàn Thành</p>
+                            <h3 class="text-2xl font-display font-bold text-white">28,340</h3>
+                        </div>
+                    </div>
+                    <div class="flex items-center text-green-400 text-sm font-medium mt-4">
+                        <i class="fa-solid fa-arrow-trend-up mr-1"></i> <span data-i18n="statStudentsToday">+124 hôm nay</span>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6 rounded-2xl">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-purple-500/10 text-purple-400 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-shield-check"></i>
+                        </div>
+                        <div>
+                            <p class="text-slate-400 text-sm font-medium" data-i18n="statIdentities">Danh Tính Đã Xác Thực</p>
+                            <h3 class="text-2xl font-display font-bold text-white">12,480</h3>
+                        </div>
+                    </div>
+                    <div class="flex items-center text-slate-400 text-sm mt-4" data-i18n="statIdentityZKP">
+                        Bảo mật bởi zk-SNARKs
+                    </div>
+                </div>
+            </div>
+
+            <!-- Portfolio section -->
+            <div id="portfolio-section" class="glass-panel p-6 rounded-2xl hidden">
+                <div class="flex justify-between items-end mb-6 border-b border-dark-700/50 pb-4">
+                    <div>
+                        <h2 class="text-xl font-display font-bold text-white" data-i18n="yourWallet">Ví Của Bạn</h2>
+                        <p class="text-slate-400 text-sm" data-i18n="estimatedBalance">Tổng Số Dư Ước Tính</p>
+                    </div>
+                    <div class="text-right">
+                        <h3 class="text-3xl font-display font-bold text-white" id="total-balance">$0.00</h3>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="text-slate-400 text-sm border-b border-dark-700/30">
+                                <th class="pb-3 font-medium pl-2" data-i18n="assetCol">Tài sản</th>
+                                <th class="pb-3 font-medium text-right" data-i18n="amountCol">Số lượng</th>
+                                <th class="pb-3 font-medium text-right" data-i18n="priceCol">Giá</th>
+                                <th class="pb-3 font-medium text-right pr-2" data-i18n="valueCol">Giá trị</th>
+                            </tr>
+                        </thead>
+                        <tbody id="portfolio-table-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== TAB KIẾN THỨC (KNOWLEDGE ACADEMY) ==================== -->
+        <div id="tab-knowledge" class="hidden-tab space-y-8">
+            <div class="text-center mb-10">
+                <h2 class="font-display text-3xl md:text-4xl font-bold text-white mb-3" data-i18n="academyTitle">Học Viện Akashic Academy</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto" data-i18n="academySubtitle">Nắm vững các khái niệm từ cơ bản đến nâng cao về Tiền điện tử, Tài chính phi tập trung (DeFi) và các công nghệ bảo mật danh tính thế hệ mới.</p>
+            </div>
+
+            <!-- Dynamic Courses Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="academy-courses-container">
+                <!-- Course Cards will load via JavaScript to respond to dynamic translation -->
+            </div>
+
+            <div class="glass-panel rounded-3xl p-6 md:p-8 mt-12">
+                <div class="flex flex-col lg:flex-row gap-8 items-center">
+                    <div class="lg:w-1/2 space-y-4">
+                        <div class="inline-flex items-center gap-2 bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 px-3 py-1 rounded-full text-xs font-semibold">
+                            <i class="fa-solid fa-coins animate-bounce"></i> LEARN & EARN (CHƠI & NHẬN THƯỞNG)
+                        </div>
+                        <h3 class="text-2xl font-display font-bold text-white" data-i18n="quizHeader">Kiểm Tra Kiến Thức Web3</h3>
+                        <p class="text-slate-300" data-i18n="quizIntro">Trả lời các câu hỏi ngắn dưới đây để kiểm tra hiểu biết của bạn về thế giới Web3 và nhận ngay phần thưởng token <strong class="text-akashic-400">AKA</strong> trực tiếp vào số dư ví của bạn!</p>
+                        
+                        <div class="p-4 bg-dark-900/50 rounded-xl border border-dark-700/50 text-xs flex gap-3 items-center text-slate-400">
+                            <i class="fa-solid fa-circle-info text-akashic-400 text-lg"></i>
+                            <span data-i18n="quizRequirement">Yêu cầu: Hãy chắc chắn bạn đã kết nối ví trước khi gửi đáp án để hệ thống có thể chuyển thưởng AKA vào số dư của bạn.</span>
+                        </div>
+                    </div>
+                    
+                    <div class="lg:w-1/2 w-full bg-dark-900/60 rounded-2xl p-6 border border-dark-700/50 flex flex-col justify-between min-h-[300px]">
+                        <div id="quiz-question-box" class="space-y-4">
+                            <div class="flex justify-between items-center text-xs text-slate-400">
+                                <span id="quiz-progress-text">Câu hỏi 1/3</span>
+                                <span class="text-yellow-400 font-bold" id="quiz-reward-text">+50 AKA</span>
+                            </div>
+                            <h4 id="quiz-question-text" class="text-white font-semibold text-lg leading-relaxed">Đâu là tính năng cốt lõi của công nghệ Xác Thực Không Tri Thức (ZKP)?</h4>
+                            <div id="quiz-options-container" class="space-y-2.5">
+                                <!-- Loaded dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Quiz Success / State Indicator -->
+                        <div class="mt-6 flex justify-between items-center border-t border-dark-700/50 pt-4">
+                            <div id="quiz-feedback" class="text-sm font-medium text-slate-400">Chọn phương án đúng nhất...</div>
+                            <button id="btn-submit-quiz" onclick="submitQuizAnswer()" class="bg-akashic-600 hover:bg-akashic-500 text-white px-6 py-2.5 rounded-xl font-bold text-sm transition-all shadow-md">
+                                <span data-i18n="quizSubmitBtn">Xác Nhận Đáp Án</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== TAB GIAO DỊCH (DEFI SWAP) ==================== -->
+        <div id="tab-swap" class="hidden-tab">
+            <div class="text-center mb-8">
+                <h2 class="font-display text-3xl font-bold text-white mb-2" data-i18n="swapTitle">Trải Nghiệm Tài Chính DeFi</h2>
+                <p class="text-slate-400" data-i18n="swapSubtitle">Giao dịch tài sản mã hóa tức thì thông qua hợp đồng thông minh giả lập (Smart Contract).</p>
+            </div>
+            <div class="max-w-md mx-auto">
+                <div class="glass-panel rounded-3xl p-1 shadow-2xl">
+                    <div class="bg-dark-800/80 rounded-[22px] p-5 border border-dark-700/30 relative">
+                        <div class="flex justify-between items-center mb-5">
+                            <h2 class="text-lg font-medium text-white" data-i18n="swapCardHeader">Hoán đổi (Swap)</h2>
+                            <button class="text-slate-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-dark-700/50">
+                                <i class="fa-solid fa-gear"></i>
+                            </button>
+                        </div>
+
+                        <!-- Pay Input Box -->
+                        <div class="bg-dark-900/60 rounded-2xl p-4 border border-dark-700/30 hover:border-dark-700/80 transition-colors focus-within:border-akashic-500/50">
+                            <div class="flex justify-between text-sm text-slate-400 mb-2">
+                                <span data-i18n="swapPay">Bạn trả</span>
+                                <span><span data-i18n="swapBalance">Số dư</span>: <span id="balance-pay">0.00</span></span>
+                            </div>
+                            <div class="flex items-center justify-between gap-4">
+                                <input type="number" id="swap-input-amount" placeholder="0" class="bg-transparent text-3xl font-display text-white w-full outline-none placeholder-slate-600 overflow-hidden" oninput="calculateSwap()">
+                                <button class="flex items-center gap-2 bg-dark-700 hover:bg-dark-600 py-1.5 px-3 rounded-full text-white font-medium transition-colors shrink-0">
+                                    <img src="https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=025" alt="ETH" class="w-5 h-5">
+                                    ETH <i class="fa-solid fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Arrow Transition Intermediary -->
+                        <div class="relative h-2 my-1 flex justify-center items-center z-10">
+                            <div class="absolute w-full h-[1px] bg-dark-700/50"></div>
+                            <button class="w-10 h-10 bg-dark-800 border-4 border-dark-900 rounded-xl flex items-center justify-center text-slate-300 hover:text-akashic-400 transition-colors hover:bg-dark-700">
+                                <i class="fa-solid fa-arrow-down"></i>
+                            </button>
+                        </div>
+
+                        <!-- Receive Input Box -->
+                        <div class="bg-dark-900/60 rounded-2xl p-4 border border-dark-700/30 hover:border-dark-700/80 transition-colors">
+                            <div class="flex justify-between text-sm text-slate-400 mb-2">
+                                <span data-i18n="swapReceive">Bạn nhận</span>
+                                <span><span data-i18n="swapBalance">Số dư</span>: <span id="balance-receive">0.00</span></span>
+                            </div>
+                            <div class="flex items-center justify-between gap-4">
+                                <input type="number" id="swap-output-amount" placeholder="0" class="bg-transparent text-3xl font-display text-slate-300 w-full outline-none placeholder-slate-600 cursor-not-allowed" readonly>
+                                <button class="flex items-center gap-2 bg-akashic-900/50 hover:bg-akashic-900 border border-akashic-500/30 py-1.5 px-3 rounded-full text-white font-medium transition-colors shrink-0">
+                                    <div class="w-5 h-5 rounded-full bg-gradient-to-br from-akashic-400 to-blue-600 flex items-center justify-center"><i class="fa-solid fa-infinity text-[10px]"></i></div>
+                                    AKA <i class="fa-solid fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Info line -->
+                        <div class="flex justify-between items-center mt-4 px-2 text-sm">
+                            <span class="text-slate-400 cursor-pointer border-b border-dashed border-slate-600 pb-0.5" data-i18n="swapRate">Tỷ giá</span>
+                            <span class="text-slate-300 flex items-center gap-1">
+                                1 ETH = <span id="exchange-rate">1,250</span> AKA
+                            </span>
+                        </div>
+
+                        <button id="btn-execute-swap" onclick="executeSwap()" class="w-full mt-6 bg-akashic-600/50 text-slate-300 py-4 rounded-xl font-bold text-lg cursor-not-allowed transition-all relative overflow-hidden group">
+                            <span data-i18n="btnConnectWalletToSwap">Kết nối ví để Giao dịch</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== TAB XÁC THỰC (IDENTITY ZK-PROOF) ==================== -->
+        <div id="tab-identity" class="hidden-tab">
+            <div class="max-w-3xl mx-auto">
+                <div class="text-center mb-10">
+                    <div class="w-20 h-20 mx-auto bg-dark-800 rounded-2xl flex items-center justify-center border border-dark-700 mb-6 relative group">
+                        <div class="absolute inset-0 bg-akashic-500/20 rounded-2xl filter blur-xl group-hover:blur-2xl transition-all opacity-0 group-hover:opacity-100"></div>
+                        <i class="fa-solid fa-fingerprint text-4xl text-akashic-400 relative z-10"></i>
+                    </div>
+                    <h2 class="font-display text-3xl font-bold text-white mb-3" data-i18n="idTitle">Xác Thực Danh Tính Bảo Mật</h2>
+                    <p class="text-slate-400 max-w-lg mx-auto" data-i18n="idSubtitle">
+                        Chứng minh bạn là ai, độ tuổi, hoặc chứng chỉ của bạn trên Blockchain mà KHÔNG làm lộ bất kỳ dữ liệu cá nhân nào nhờ công nghệ mật mã Zero-Knowledge.
+                    </p>
+                </div>
+
+                <div class="glass-panel rounded-2xl p-1 shadow-xl">
+                    <div class="bg-dark-800/90 rounded-[14px] p-6 md:p-8">
+                        
+                        <!-- Unconnected state -->
+                        <div id="id-status-unconnected" class="text-center py-8">
+                            <i class="fa-solid fa-link-slash text-4xl text-slate-600 mb-4"></i>
+                            <h3 class="text-xl font-medium text-white mb-2" data-i18n="idUnconnectedHeader">Chưa Kết Nối Ví</h3>
+                            <p class="text-slate-400 mb-6" data-i18n="idUnconnectedDesc">Hãy kết nối ví Web3 của bạn để bắt đầu khởi tạo và quản lý hồ sơ định danh phi tập trung.</p>
+                            <button onclick="toggleWalletConnection()" class="bg-akashic-600 hover:bg-akashic-500 text-white px-6 py-2.5 rounded-lg font-medium transition-colors">
+                                <span data-i18n="btnConnectWalletToID">Kết Nối Ví Ngay</span>
+                            </button>
+                        </div>
+
+                        <!-- Connected state -->
+                        <div id="id-status-connected" class="hidden">
+                            <div class="flex items-center justify-between mb-8 pb-6 border-b border-dark-700/50">
+                                <div>
+                                    <p class="text-sm text-slate-400 mb-1" data-i18n="idDidLabel">Định danh của bạn (DID)</p>
+                                    <div class="flex items-center gap-2">
+                                        <code class="bg-dark-900 px-3 py-1 rounded text-akashic-300 text-sm font-mono" id="did-display">did:akashic:0x...</code>
+                                        <button class="text-slate-500 hover:text-white" onclick="copyToClipboard('did-display')"><i class="fa-regular fa-copy"></i></button>
+                                    </div>
+                                </div>
+                                <div class="bg-green-500/10 text-green-400 px-3 py-1 rounded-full text-sm font-medium border border-green-500/20 flex items-center gap-2">
+                                    <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div> <span data-i18n="idActive">Đang hoạt động</span>
+                                </div>
+                            </div>
+
+                            <h4 class="font-medium text-white mb-4" data-i18n="idCredentialsTitle">Chứng Chỉ Định Danh Của Bạn</h4>
+                            
+                            <!-- Credentials Stack -->
+                            <div class="space-y-4">
+                                <!-- Credential 1 -->
+                                <div class="bg-dark-900/60 border border-dark-700/50 rounded-xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-10 h-10 rounded-full bg-blue-500/10 text-blue-400 flex items-center justify-center text-lg shrink-0">
+                                            <i class="fa-solid fa-person"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-medium text-white" data-i18n="credPoHName">Bằng Chứng Con Người (PoH)</h5>
+                                            <p class="text-xs text-slate-400" data-i18n="credPoHDesc">Xác nhận ví của bạn thuộc về một cá nhân con người duy nhất, không phải bot tự động.</p>
+                                        </div>
+                                    </div>
+                                    <div id="cred-poh-status">
+                                        <!-- Dynamically filled -->
+                                    </div>
+                                </div>
+
+                                <!-- Credential 2 -->
+                                <div class="bg-dark-900/60 border border-dark-700/50 rounded-xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-10 h-10 rounded-full bg-purple-500/10 text-purple-400 flex items-center justify-center text-lg shrink-0">
+                                            <i class="fa-solid fa-calendar-check"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-medium text-white" data-i18n="credAgeName">Xác Minh Tuổi Tác (>18)</h5>
+                                            <p class="text-xs text-slate-400" data-i18n="credAgeDesc">Chứng minh bạn đã trên 18 tuổi mà không cần tiết lộ ngày tháng năm sinh thực tế.</p>
+                                        </div>
+                                    </div>
+                                    <div id="cred-age-status">
+                                        <!-- Dynamically filled -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-8 bg-akashic-900/20 border border-akashic-500/20 rounded-xl p-4">
+                                <div class="flex gap-3">
+                                    <i class="fa-solid fa-shield-halved text-akashic-400 mt-0.5"></i>
+                                    <p class="text-sm text-slate-300" data-i18n="idSecurityFootnote">
+                                        Dữ liệu thô của bạn <span class="font-bold text-white">không bao giờ</span> rời khỏi thiết bị. Các bằng chứng (Proofs) được tạo mã hóa tại chỗ và chỉ có kết quả (Đúng/Sai) mới được lưu trên Blockchain.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // ----------------- TRANSLATION DATA (i18n) -----------------
+        let currentLang = 'vi';
+
+        const i18n = {
+            vi: {
+                navDashboard: "Tổng Quan",
+                navKnowledge: "Học Viện",
+                navSwap: "DeFi Swap",
+                navIdentity: "Xác Thực ZK",
+                connectWalletBtn: "Kết Nối Ví",
+                walletConnecting: "Đang kết nối...",
+                walletConnected: "Đã Kết Nối",
+                walletDisconnected: "Đã ngắt kết nối ví",
+                walletSuccessMsg: "Chào mừng bạn đến với Akashic Web3 Portal.",
+                walletExitMsg: "Phiên làm việc đã kết thúc.",
+                heroTitle: "Cổng Thông Tin <span class='text-transparent bg-clip-text bg-gradient-to-r from-akashic-400 to-blue-600 text-glow'>Web3 Đột Phá</span>",
+                heroSubtitle: "Akashic giúp bạn làm chủ kiến thức Crypto, trải nghiệm tài chính phi tập trung (DeFi) và bảo vệ dữ liệu cá nhân qua công nghệ xác thực Zero-Knowledge.",
+                btnLearn: "Học Crypto ngay",
+                btnVerify: "Tạo danh tính zk-ID",
+                statTVL: "TVL Hệ Sinh Thái",
+                statStudents: "Học Viên Hoàn Thành",
+                statStudentsToday: "+124 hôm nay",
+                statIdentities: "Bằng Chứng Đã Xác Thực",
+                statIdentityZKP: "Bảo mật bằng zk-SNARKs",
+                yourWallet: "Ví Web3 Demo",
+                estimatedBalance: "Số dư ước tính",
+                assetCol: "Tài sản",
+                amountCol: "Số lượng",
+                priceCol: "Giá",
+                valueCol: "Giá trị",
+                
+                // Academy / Courses Section
+                academyTitle: "Học Viện Akashic",
+                academySubtitle: "Bắt đầu bài học miễn phí trực quan nhất về tài chính mới, cơ chế blockchain và công nghệ mã hóa tiên phong.",
+                startCourseBtn: "Bắt đầu học ngay",
+                pohClaimBtn: "Thử Thử Thách",
+                
+                // Quiz translation
+                quizHeader: "Thử Thách Nhận Thưởng AKA",
+                quizIntro: "Kiểm tra kiến thức thu được để khai thác token thưởng của Akashic. Mỗi câu trả lời chính xác cộng trực tiếp AKA vào tài khoản ví của bạn!",
+                quizRequirement: "Lưu ý: Bạn phải kết nối ví ở góc phải màn hình để nhận token thưởng.",
+                quizQuestion_0: "Đâu là ưu điểm lớn nhất của công nghệ Xác Thực Không Tri Thức (ZKP) đối với thông tin cá nhân?",
+                quizOptions_0: [
+                    "Cho phép chứng minh thông tin là đúng mà không làm tiết lộ dữ liệu thô.",
+                    "Giúp mọi người giao dịch nhanh hơn gấp 100 lần so với ngân hàng.",
+                    "Tạo điều kiện để chia sẻ toàn bộ hồ sơ y tế lên Internet công cộng."
+                ],
+                quizQuestion_1: "Trong tài chính phi tập trung (DeFi), khái niệm Liquidity Pool (Bể thanh khoản) là gì?",
+                quizOptions_1: [
+                    "Là một máy chủ dữ liệu tập trung lưu thông tin giao dịch.",
+                    "Là các bể chứa tài sản mã hóa được vận hành tự động bởi Hợp đồng thông minh.",
+                    "Là trụ sở ngân hàng được bảo mật bằng công nghệ lượng tử."
+                ],
+                quizQuestion_2: "Blockchain Bitcoin sử dụng cơ chế đồng thuận nào để đảm bảo tính phi tập trung?",
+                quizOptions_2: [
+                    "Bằng chứng công việc (Proof-of-Work - PoW)",
+                    "Xác thực uy tín cá nhân (Proof-of-Authority)",
+                    "Hệ thống bỏ phiếu đại biểu tập trung (DPOS)"
+                ],
+                quizSubmitBtn: "Xác Nhận Đáp Án",
+                quizFeedbackCorrect: "Chính xác! Bạn đã hiểu đúng bài học. Nhận ngay +50 AKA thưởng!",
+                quizFeedbackIncorrect: "Chưa chính xác! Thử suy nghĩ lại xem nào.",
+                quizConnectWalletRequired: "Hãy kết nối ví trước để có thể tích lũy AKA!",
+                quizCompletedAll: "Tuyệt vời! Bạn đã hoàn thành tất cả các câu hỏi hôm nay.",
+
+                // Swap Section
+                swapTitle: "Trải Nghiệm DeFi",
+                swapSubtitle: "Chuyển đổi tài sản ngang hàng với mức phí siêu rẻ và tức thời.",
+                swapCardHeader: "Hoán đổi (Swap)",
+                swapPay: "Bạn trả",
+                swapReceive: "Bạn nhận",
+                swapBalance: "Số dư",
+                swapRate: "Tỷ giá",
+                btnConnectWalletToSwap: "Kết nối ví để hoán đổi",
+                btnEnterAmount: "Vui lòng nhập số lượng",
+                btnInsufficientBalance: "Số dư ETH không đủ",
+                btnExecuteSwap: "Xác nhận Giao dịch",
+                swapSuccessTitle: "Giao dịch thành công!",
+                swapSuccessDesc: "Bạn đã chuyển đổi {in} ETH thành công sang {out} AKA.",
+
+                // Identity Section
+                idTitle: "Định Danh Bảo Mật (ZKP)",
+                idSubtitle: "Chứng thực các thuộc tính cá nhân hoàn toàn an toàn mà không xâm phạm quyền riêng tư cơ bản.",
+                idUnconnectedHeader: "Chưa Kết Nối Ví",
+                idUnconnectedDesc: "Vui lòng kết nối ví để thiết lập định danh phi tập trung (DID) riêng biệt.",
+                btnConnectWalletToID: "Liên Kết Ví Ngay",
+                idDidLabel: "Chuỗi Định Danh Phân Tán (DID)",
+                idActive: "Đã thiết lập",
+                idCredentialsTitle: "Bằng chứng bảo mật mật mã",
+                credPoHName: "Chứng nhận Người Thật (PoH)",
+                credPoHDesc: "Ngăn chặn các cuộc tấn công Sybil (Spam bot) mà không bắt buộc cung cấp hộ chiếu.",
+                credAgeName: "Chứng nhận Tuổi (>18)",
+                credAgeDesc: "Đáp ứng yêu cầu tuân thủ quốc tế về độ tuổi mà không lưu ngày sinh của bạn.",
+                idSecurityFootnote: "Công thức ZK-SNARKs sẽ chạy offline trực tiếp trong trình duyệt để sinh ra mã bằng chứng.",
+                pohGeneratedSuccess: "Bằng chứng PoH đã được tạo thành công trên blockchain Akashic!",
+                ageGeneratedSuccess: "Bằng chứng xác thực độ tuổi đã được tạo thành công!",
+                btnGenerateZKP: "Tạo Bằng Chứng ZK",
+                badgeVerified: "Đã Xác Minh"
+            },
+            en: {
+                navDashboard: "Overview",
+                navKnowledge: "Academy",
+                navSwap: "DeFi Swap",
+                navIdentity: "ZK Identity",
+                connectWalletBtn: "Connect Wallet",
+                walletConnecting: "Connecting...",
+                walletConnected: "Connected",
+                walletDisconnected: "Wallet Disconnected",
+                walletSuccessMsg: "Successfully logged in to Akashic Web3 Portal.",
+                walletExitMsg: "Web3 session terminated.",
+                heroTitle: "Revolutionary <span class='text-transparent bg-clip-text bg-gradient-to-r from-akashic-400 to-blue-600 text-glow'>Web3 Portal</span>",
+                heroSubtitle: "Akashic helps you master crypto assets, experiment with decentralized finance (DeFi), and protect your personal privacy via Zero-Knowledge proofs.",
+                btnLearn: "Explore Academy",
+                btnVerify: "Create zk-Identity",
+                statTVL: "Ecosystem TVL",
+                statStudents: "Graduated Learners",
+                statStudentsToday: "+124 today",
+                statIdentities: "Verified Credentials",
+                statIdentityZKP: "Secured by zk-SNARKs",
+                yourWallet: "Demo Web3 Wallet",
+                estimatedBalance: "Estimated Total Balance",
+                assetCol: "Asset",
+                amountCol: "Amount",
+                priceCol: "Price",
+                valueCol: "Value",
+
+                // Academy / Courses Section
+                academyTitle: "Akashic Academy",
+                academySubtitle: "Unlock highly intuitive lessons on modern currency, consensus mechanisms, and cryptography shields.",
+                startCourseBtn: "Start Learning",
+                pohClaimBtn: "Try Challenge",
+
+                // Quiz translation
+                quizHeader: "Earn AKA Tokens Quiz",
+                quizIntro: "Test your digital currency intelligence and harvest Akashic ecosystem tokens instantly to your balance!",
+                quizRequirement: "Note: Connect your wallet at the top right to claim your crypto rewards.",
+                quizQuestion_0: "What is the primary feature of Zero-Knowledge Proof (ZKP) technology for identity privacy?",
+                quizOptions_0: [
+                    "Proving a claim is true without revealing any details of the raw data.",
+                    "Allowing transactions to process exactly 100x faster than traditional banks.",
+                    "Publishing medical files to the public internet securely."
+                ],
+                quizQuestion_1: "In Decentralized Finance (DeFi), what is a Liquidity Pool?",
+                quizOptions_1: [
+                    "A centralized cloud server managing transaction histories.",
+                    "A smart-contract locked pool of tokens enabling automatic, decentralized trades.",
+                    "A traditional vault operated by post-quantum encryption devices."
+                ],
+                quizQuestion_2: "Which consensus mechanism does the Bitcoin network use to remain decentralized?",
+                quizOptions_2: [
+                    "Proof-of-Work (PoW)",
+                    "Proof-of-Authority (PoA)",
+                    "Delegated Proof of Stake (DPoS)"
+                ],
+                quizSubmitBtn: "Submit Answer",
+                quizFeedbackCorrect: "Superb! Correct answer. Enjoy your +50 AKA tokens!",
+                quizFeedbackIncorrect: "Not correct yet! Give it another analytical thought.",
+                quizConnectWalletRequired: "Please connect your wallet first to accumulate your rewards!",
+                quizCompletedAll: "Amazing! You have successfully resolved all questions for today.",
+
+                // Swap Section
+                swapTitle: "Decentralized Finance (DeFi)",
+                swapSubtitle: "Peer-to-peer digital asset exchange with minimum slippage and zero intermediates.",
+                swapCardHeader: "DeFi Swap",
+                swapPay: "You Pay",
+                swapReceive: "You Receive",
+                swapBalance: "Balance",
+                swapRate: "Exchange Rate",
+                btnConnectWalletToSwap: "Connect Wallet to Swap",
+                btnEnterAmount: "Please enter an amount",
+                btnInsufficientBalance: "Insufficient ETH Balance",
+                btnExecuteSwap: "Execute Swap",
+                swapSuccessTitle: "Swap Executed!",
+                swapSuccessDesc: "Successfully swapped {in} ETH for {out} AKA tokens.",
+
+                // Identity Section
+                idTitle: "Cryptographic zk-Identity",
+                idSubtitle: "Assert your identity credentials to web services securely without disclosing credentials.",
+                idUnconnectedHeader: "Wallet Not Connected",
+                idUnconnectedDesc: "Connect your decentralized identity wallet to setup independent verifiable credentials.",
+                btnConnectWalletToID: "Connect Wallet Now",
+                idDidLabel: "Decentralized Identifier (DID)",
+                idActive: "Active Profile",
+                idCredentialsTitle: "Cryptographic Credentials",
+                credPoHName: "Proof of Humanity (PoH)",
+                credPoHDesc: "Differentiate human beings from high-tech automated sybil bots.",
+                credAgeName: "Age Assertion (>18)",
+                credAgeDesc: "Verify your legal age globally without leaking date of birth records.",
+                idSecurityFootnote: "Zero-Knowledge mathematical proofs are constructed locally inside your browser.",
+                pohGeneratedSuccess: "Proof of Humanity credential registered onto the Akashic chain!",
+                ageGeneratedSuccess: "Age credential verified by cryptographic ZKP successfully!",
+                btnGenerateZKP: "Generate ZK Proof",
+                badgeVerified: "Verified"
+            }
+        };
+
+        // ----------------- STREAMING_CHUNK: State management -----------------
+        let isConnected = false;
+        let userAddress = null;
+        let ethBalance = 0;
+        let akaBalance = 0;
+        const exchangeRate = 1250; 
+
+        // Dynamic Database of Courses
+        const courseData = [
+            {
+                id: "crypto-basics",
+                iconClass: "fa-brands fa-bitcoin",
+                tagColor: "bg-blue-500/20 text-blue-400",
+                vi: {
+                    level: "CƠ BẢN",
+                    title: "Tiền Điện Tử Cơ Bản",
+                    desc: "Khám phá bản chất phi tập trung của Blockchain, Bitcoin, Ethereum và sự khác biệt căn bản so với hệ thống tiền pháp định tập trung."
+                },
+                en: {
+                    level: "BEGINNER",
+                    title: "Crypto Fundamentals",
+                    desc: "Unveil the architecture of decentralized blockchains, Bitcoin, Ethereum, and how consensus replaces traditional central banking."
+                }
+            },
+            {
+                id: "defi-mastery",
+                iconClass: "fa-solid fa-money-bill-transfer",
+                tagColor: "bg-purple-500/20 text-purple-400",
+                vi: {
+                    level: "TRUNG CẤP",
+                    title: "Làm Chủ Tài Chính DeFi",
+                    desc: "Tìm hiểu cấu trúc của Sàn giao dịch phi tập trung (DEX), Bể thanh khoản (Liquidity Pools), và cơ hội gia tăng lợi nhuận an toàn."
+                },
+                en: {
+                    level: "INTERMEDIATE",
+                    title: "Mastering DeFi Mechanics",
+                    desc: "Delve into the mechanics of Decentralized Exchanges (DEXs), Liquidity Providers, Smart Contract lending protocols, and yield farms."
+                }
+            },
+            {
+                id: "zkp-identity",
+                iconClass: "fa-solid fa-fingerprint",
+                tagColor: "bg-akashic-500/20 text-akashic-400",
+                vi: {
+                    level: "NÂNG CAO",
+                    title: "Xác Thực zk-Identity",
+                    desc: "Phân tích hoạt động thực tế của Bằng chứng Không Tri thức (ZKP). Học cách xác thực và bảo vệ quyền lợi bảo mật trực tuyến."
+                },
+                en: {
+                    level: "ADVANCED",
+                    title: "zk-Identity Frameworks",
+                    desc: "Analyze Zero-Knowledge Proofs (ZKP) in practice. Protect sensitive consumer data using modern cryptographic state boundaries."
+                }
+            }
+        ];
+
+        // Quiz State Engine
+        const quizList = [
+            { id: 0, reward: 50 },
+            { id: 1, reward: 50 },
+            { id: 2, reward: 50 }
+        ];
+        let currentQuizIndex = 0;
+        let selectedQuizOption = null;
+
+        // Custom assets portfolio mock dataset
+        const mockAssets = [
+            { symbol: 'ETH', name: 'Ethereum', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=025', balance: 0, price: 3450.20 },
+            { symbol: 'AKA', name: 'Akashic', logo: 'infinity', balance: 0, price: 2.76 },
+            { symbol: 'USDC', name: 'USD Coin', logo: 'https://cryptologos.cc/logos/usd-coin-usdc-logo.svg?v=025', balance: 0, price: 1.00 }
+        ];
+
+        // ZKP Credentials Generation States
+        let isPohVerified = false;
+        let isAgeVerified = false;
+
+        // ----------------- STREAMING_CHUNK: Localization Logic -----------------
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            // Adjust active state buttons visually
+            const viBtn = document.getElementById('lang-vi-btn');
+            const enBtn = document.getElementById('lang-en-btn');
+            if (lang === 'vi') {
+                viBtn.className = "px-2.5 py-1 text-xs font-bold rounded transition-all bg-akashic-600 text-white";
+                enBtn.className = "px-2.5 py-1 text-xs font-bold rounded transition-all text-slate-400 hover:text-slate-200";
+            } else {
+                enBtn.className = "px-2.5 py-1 text-xs font-bold rounded transition-all bg-akashic-600 text-white";
+                viBtn.className = "px-2.5 py-1 text-xs font-bold rounded transition-all text-slate-400 hover:text-slate-200";
+            }
+
+            // Loop and replace static translations
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (i18n[lang][key]) {
+                    element.textContent = i18n[lang][key];
+                }
+            });
+
+            // Specific manual structural translation (with HTML structure inside)
+            document.getElementById('hero-title').innerHTML = i18n[lang].heroTitle;
+
+            // Re-render components relying on multi-lang databases
+            renderCourses();
+            renderQuiz();
+            updateSwapButtonState();
+            renderCredentialsUI();
+        }
+
+        // ----------------- STREAMING_CHUNK: Render Academy Courses -----------------
+        function renderCourses() {
+            const container = document.getElementById('academy-courses-container');
+            container.innerHTML = '';
+
+            courseData.forEach(course => {
+                const langContent = course[currentLang];
+                
+                const card = document.createElement('div');
+                card.className = "glass-panel rounded-2xl p-1 overflow-hidden group cursor-pointer hover:-translate-y-1 transition-all";
+                card.innerHTML = `
+                    <div class="bg-dark-800 rounded-xl h-full flex flex-col relative">
+                        <div class="absolute top-3 right-3 ${course.tagColor} text-xs font-bold px-2 py-1 rounded-md">
+                            ${langContent.level}
+                        </div>
+                        <div class="h-40 bg-dark-900 border-b border-dark-700/50 flex items-center justify-center rounded-t-xl overflow-hidden relative">
+                            <div class="absolute inset-0 bg-gradient-to-br from-akashic-900/40 to-transparent"></div>
+                            <i class="${course.iconClass} text-6xl text-slate-700 group-hover:text-akashic-500 transition-colors duration-500 relative z-10"></i>
+                        </div>
+                        <div class="p-5 flex-grow">
+                            <h3 class="text-lg font-bold text-white mb-2">${langContent.title}</h3>
+                            <p class="text-slate-400 text-sm mb-4 leading-relaxed">${langContent.desc}</p>
+                        </div>
+                        <div class="p-5 pt-0 mt-auto">
+                            <button class="w-full bg-dark-700 hover:bg-akashic-600 text-white py-2 rounded-lg text-sm font-medium transition-colors">
+                                ${i18n[currentLang].startCourseBtn}
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // ----------------- STREAMING_CHUNK: Web3 Quiz Interactive Loop -----------------
+        function renderQuiz() {
+            if (currentQuizIndex >= quizList.length) {
+                // Completed State
+                document.getElementById('quiz-question-box').innerHTML = `
+                    <div class="text-center py-8 space-y-4">
+                        <div class="w-16 h-16 mx-auto rounded-full bg-yellow-500/15 text-yellow-400 flex items-center justify-center text-3xl">
+                            <i class="fa-solid fa-trophy animate-bounce"></i>
+                        </div>
+                        <h4 class="text-white font-bold text-xl">${i18n[currentLang].quizCompletedAll}</h4>
+                        <p class="text-slate-400 text-sm">Hẹn gặp lại bạn vào ngày mai để tiếp tục nhận AKA.</p>
+                    </div>
+                `;
+                document.getElementById('btn-submit-quiz').style.display = 'none';
+                document.getElementById('quiz-feedback').innerHTML = '';
+                return;
+            }
+
+            const currentQuiz = quizList[currentQuizIndex];
+            const qKey = `quizQuestion_${currentQuiz.id}`;
+            const optKey = `quizOptions_${currentQuiz.id}`;
+
+            document.getElementById('quiz-progress-text').textContent = `${currentLang === 'vi' ? 'Câu hỏi' : 'Question'} ${currentQuizIndex + 1}/${quizList.length}`;
+            document.getElementById('quiz-reward-text').textContent = `+${currentQuiz.reward} AKA`;
+            document.getElementById('quiz-question-text').textContent = i18n[currentLang][qKey];
+
+            const optionsContainer = document.getElementById('quiz-options-container');
+            optionsContainer.innerHTML = '';
+            selectedQuizOption = null;
+
+            i18n[currentLang][optKey].forEach((option, idx) => {
+                const optBtn = document.createElement('button');
+                optBtn.className = "w-full text-left bg-dark-800/60 hover:bg-dark-800 border border-dark-700 p-3.5 rounded-xl text-sm text-slate-300 hover:text-white transition-all flex items-start gap-3 cursor-pointer";
+                optBtn.onclick = () => selectQuizOption(idx, optBtn);
+                optBtn.innerHTML = `
+                    <span class="w-5 h-5 rounded-full border border-dark-600 flex items-center justify-center shrink-0 text-xs font-bold text-slate-400 option-indicator">
+                        ${String.fromCharCode(65 + idx)}
+                    </span>
+                    <span>${option}</span>
+                `;
+                optionsContainer.appendChild(optBtn);
+            });
+
+            document.getElementById('btn-submit-quiz').style.display = 'block';
+            document.getElementById('quiz-feedback').textContent = currentLang === 'vi' ? "Chọn phương án đúng nhất..." : "Select the best option...";
+        }
+
+        function selectQuizOption(index, element) {
+            selectedQuizOption = index;
+            // Clean previously selected indicator styles
+            const elements = document.getElementById('quiz-options-container').children;
+            for (let el of elements) {
+                el.classList.remove('border-akashic-500/60', 'bg-akashic-950/20');
+                el.querySelector('.option-indicator').className = "w-5 h-5 rounded-full border border-dark-600 flex items-center justify-center shrink-0 text-xs font-bold text-slate-400 option-indicator";
+            }
+            // Mark new selection
+            element.classList.add('border-akashic-500/60', 'bg-akashic-950/20');
+            element.querySelector('.option-indicator').className = "w-5 h-5 rounded-full bg-akashic-500 border border-akashic-500 text-white flex items-center justify-center shrink-0 text-xs font-bold option-indicator";
+        }
+
+        function submitQuizAnswer() {
+            if (selectedQuizOption === null) return;
+
+            // Correct answer is option index 0 for all mock questions
+            if (selectedQuizOption === 0) {
+                if (!isConnected) {
+                    showNotification(
+                        currentLang === 'vi' ? 'Ví Chưa Kết Nối' : 'Wallet Unconnected', 
+                        i18n[currentLang].quizConnectWalletRequired, 
+                        'warning'
+                    );
+                    return;
+                }
+
+                // Add rewards to active balance
+                akaBalance = (parseFloat(akaBalance) + 50).toFixed(2);
+                mockAssets[1].balance = akaBalance;
+                
+                showNotification(
+                    currentLang === 'vi' ? 'Thành Công!' : 'Success!',
+                    i18n[currentLang].quizFeedbackCorrect,
+                    'success'
+                );
+
+                // Update UI state
+                renderPortfolio();
+                document.getElementById('balance-receive').textContent = akaBalance;
+
+                // Move to next question with a slight transition
+                currentQuizIndex++;
+                setTimeout(() => {
+                    renderQuiz();
+                }, 1500);
+
+            } else {
+                document.getElementById('quiz-feedback').innerHTML = `<span class="text-red-400"><i class="fa-solid fa-circle-xmark"></i> ${i18n[currentLang].quizFeedbackIncorrect}</span>`;
+            }
+        }
+
+        // ----------------- STREAMING_CHUNK: DeFi Swap Calculations -----------------
+        function switchTab(tabId) {
+            document.querySelectorAll('.active-tab').forEach(el => {
+                el.classList.remove('active-tab');
+                el.classList.add('hidden-tab');
+            });
+            
+            const target = document.getElementById(`tab-${tabId}`);
+            if(target) {
+                target.classList.remove('hidden-tab');
+                target.classList.add('active-tab');
+            }
+
+            document.querySelectorAll('.nav-item').forEach(el => {
+                el.classList.remove('text-white', 'border-akashic-500');
+                el.classList.add('text-slate-400', 'border-transparent');
+            });
+            
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if(activeNav) {
+                activeNav.classList.remove('text-slate-400', 'border-transparent');
+                activeNav.classList.add('text-white', 'border-akashic-500');
+            }
+        }
+
+        function toggleWalletConnection() {
+            const btn = document.getElementById('connect-wallet-btn');
+            
+            if (!isConnected) {
+                btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i><span>${i18n[currentLang].walletConnecting}</span>`;
+                
+                setTimeout(() => {
+                    isConnected = true;
+                    const chars = '0123456789abcdef';
+                    let addr = '0x';
+                    for(let i=0; i<40; i++) addr += chars[Math.floor(Math.random() * chars.length)];
+                    userAddress = addr;
+                    
+                    ethBalance = (Math.random() * 5 + 0.5).toFixed(4);
+                    akaBalance = (Math.random() * 100).toFixed(2); // Starting balance
+                    mockAssets[0].balance = ethBalance;
+                    mockAssets[1].balance = akaBalance;
+                    mockAssets[2].balance = (Math.random() * 1000).toFixed(2);
+
+                    updateUIForConnectedState();
+                    showNotification(i18n[currentLang].walletConnected, i18n[currentLang].walletSuccessMsg, 'success');
+                }, 1000);
+            } else {
+                // Reset connection variables
+                isConnected = false;
+                userAddress = null;
+                ethBalance = 0;
+                akaBalance = 0;
+                isPohVerified = false;
+                isAgeVerified = false;
+                
+                btn.className = "bg-akashic-600 hover:bg-akashic-500 text-white px-5 py-2.5 rounded-lg font-medium transition-all shadow-[0_0_15px_rgba(14,165,233,0.3)] hover:shadow-[0_0_25px_rgba(14,165,233,0.5)] flex items-center gap-2 relative overflow-hidden group";
+                btn.innerHTML = `<span class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span><i class="fa-solid fa-wallet relative z-10"></i><span id="wallet-address-text" class="relative z-10" data-i18n="connectWalletBtn">${i18n[currentLang].connectWalletBtn}</span>`;
+                
+                document.getElementById('portfolio-section').classList.add('hidden');
+                
+                document.getElementById('balance-pay').textContent = '0.00';
+                document.getElementById('balance-receive').textContent = '0.00';
+                
+                updateSwapButtonState();
+                
+                document.getElementById('id-status-unconnected').classList.remove('hidden');
+                document.getElementById('id-status-connected').classList.add('hidden');
+
+                showNotification(i18n[currentLang].walletDisconnected, i18n[currentLang].walletExitMsg, 'info');
+            }
+        }
+
+        function updateUIForConnectedState() {
+            const btn = document.getElementById('connect-wallet-btn');
+            const shortAddr = `${userAddress.substring(0, 6)}...${userAddress.substring(38)}`;
+            
+            btn.className = "bg-dark-800 border border-dark-600 hover:border-akashic-500 text-white px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2";
+            btn.innerHTML = `<div class="w-2 h-2 rounded-full bg-green-500"></div><span class="font-mono text-sm">${shortAddr}</span>`;
+
+            document.getElementById('portfolio-section').classList.remove('hidden');
+            renderPortfolio();
+
+            document.getElementById('balance-pay').textContent = ethBalance;
+            document.getElementById('balance-receive').textContent = akaBalance;
+            updateSwapButtonState();
+
+            document.getElementById('id-status-unconnected').classList.add('hidden');
+            document.getElementById('id-status-connected').classList.remove('hidden');
+            document.getElementById('did-display').textContent = `did:aka:${shortAddr}`;
+            
+            renderCredentialsUI();
+        }
+
+        // ----------------- STREAMING_CHUNK: Zero-Knowledge Credentials Logic -----------------
+        function renderCredentialsUI() {
+            const pohContainer = document.getElementById('cred-poh-status');
+            const ageContainer = document.getElementById('cred-age-status');
+
+            if (!pohContainer || !ageContainer) return;
+
+            // PoH Verifier Column
+            if (isPohVerified) {
+                pohContainer.innerHTML = `<span class="bg-green-500/10 text-green-400 border border-green-500/20 px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1"><i class="fa-solid fa-check-circle"></i> ${i18n[currentLang].badgeVerified}</span>`;
+            } else {
+                pohContainer.innerHTML = `<button onclick="generateZkProof('poh')" class="bg-akashic-600 hover:bg-akashic-500 text-white px-4 py-1.5 rounded-lg text-sm transition-colors whitespace-nowrap shadow-[0_0_10px_rgba(14,165,233,0.3)]">${i18n[currentLang].btnGenerateZKP}</button>`;
+            }
+
+            // Age Verifier Column
+            if (isAgeVerified) {
+                ageContainer.innerHTML = `<span class="bg-green-500/10 text-green-400 border border-green-500/20 px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1"><i class="fa-solid fa-check-circle"></i> ${i18n[currentLang].badgeVerified}</span>`;
+            } else {
+                ageContainer.innerHTML = `<button onclick="generateZkProof('age')" class="bg-akashic-600 hover:bg-akashic-500 text-white px-4 py-1.5 rounded-lg text-sm transition-colors whitespace-nowrap shadow-[0_0_10px_rgba(14,165,233,0.3)]">${i18n[currentLang].btnGenerateZKP}</button>`;
+            }
+        }
+
+        function generateZkProof(type) {
+            const container = type === 'poh' ? document.getElementById('cred-poh-status') : document.getElementById('cred-age-status');
+            container.innerHTML = '<span class="text-akashic-400 text-sm flex items-center gap-2"><i class="fa-solid fa-gear fa-spin"></i> Generating SNARK...</span>';
+            
+            setTimeout(() => {
+                if (type === 'poh') {
+                    isPohVerified = true;
+                    showNotification('Zero-Knowledge Proof', i18n[currentLang].pohGeneratedSuccess, 'success');
+                } else {
+                    isAgeVerified = true;
+                    showNotification('Zero-Knowledge Proof', i18n[currentLang].ageGeneratedSuccess, 'success');
+                }
+                renderCredentialsUI();
+            }, 2500);
+        }
+
+        // ----------------- STREAMING_CHUNK: Swap Math Operations -----------------
+        function renderPortfolio() {
+            const tbody = document.getElementById('portfolio-table-body');
+            tbody.innerHTML = '';
+            let totalValue = 0;
+
+            mockAssets.forEach(asset => {
+                const value = parseFloat(asset.balance) * asset.price;
+                totalValue += value;
+                
+                let logoHtml = asset.logo === 'infinity' 
+                    ? `<div class="w-6 h-6 rounded-full bg-gradient-to-br from-akashic-400 to-blue-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-infinity text-white text-[10px]"></i></div>`
+                    : `<img src="${asset.logo}" alt="${asset.symbol}" class="w-6 h-6 rounded-full shrink-0">`;
+
+                const tr = document.createElement('tr');
+                tr.className = 'border-b border-dark-700/20 last:border-0 hover:bg-dark-800/30 transition-colors';
+                tr.innerHTML = `
+                    <td class="py-4 pl-2">
+                        <div class="flex items-center gap-3">
+                            ${logoHtml}
+                            <div>
+                                <p class="text-white font-medium">${asset.symbol}</p>
+                                <p class="text-slate-500 text-xs">${asset.name}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="py-4 text-right text-white font-medium">${parseFloat(asset.balance).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4})}</td>
+                    <td class="py-4 text-right text-slate-400">$${asset.price.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                    <td class="py-4 text-right text-white pr-2">$${value.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('total-balance').textContent = `$${totalValue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        }
+
+        function calculateSwap() {
+            const input = document.getElementById('swap-input-amount').value;
+            const outputEl = document.getElementById('swap-output-amount');
+            
+            if (input && input > 0) {
+                outputEl.value = (parseFloat(input) * exchangeRate).toFixed(2);
+            } else {
+                outputEl.value = '';
+            }
+            updateSwapButtonState();
+        }
+
+        function updateSwapButtonState() {
+            const btn = document.getElementById('btn-execute-swap');
+            const input = parseFloat(document.getElementById('swap-input-amount').value);
+            
+            if (!isConnected) {
+                btn.textContent = i18n[currentLang].btnConnectWalletToSwap;
+                btn.className = "w-full mt-6 bg-dark-700 text-slate-400 py-4 rounded-xl font-bold text-lg cursor-not-allowed transition-all";
+                return;
+            }
+
+            if (!input || input <= 0) {
+                btn.textContent = i18n[currentLang].btnEnterAmount;
+                btn.className = "w-full mt-6 bg-dark-700 text-slate-400 py-4 rounded-xl font-bold text-lg cursor-not-allowed transition-all";
+                return;
+            }
+
+            if (input > parseFloat(ethBalance)) {
+                btn.textContent = i18n[currentLang].btnInsufficientBalance;
+                btn.className = "w-full mt-6 bg-red-900/50 text-red-400 py-4 rounded-xl font-bold text-lg cursor-not-allowed transition-all";
+                return;
+            }
+
+            btn.textContent = i18n[currentLang].btnExecuteSwap;
+            btn.className = "w-full mt-6 bg-gradient-to-r from-akashic-600 to-blue-600 hover:from-akashic-500 hover:to-blue-500 text-white py-4 rounded-xl font-bold text-lg cursor-pointer transition-all shadow-[0_0_20px_rgba(14,165,233,0.3)] hover:shadow-[0_0_30px_rgba(14,165,233,0.5)] transform hover:-translate-y-0.5";
+        }
+
+        function executeSwap() {
+            const btn = document.getElementById('btn-execute-swap');
+            if(btn.classList.contains('cursor-not-allowed')) return;
+
+            const inputAmt = parseFloat(document.getElementById('swap-input-amount').value);
+            const outputAmt = parseFloat(document.getElementById('swap-output-amount').value);
+
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i>Swapping...';
+            btn.classList.add('opacity-75', 'cursor-wait');
+
+            setTimeout(() => {
+                ethBalance = (parseFloat(ethBalance) - inputAmt).toFixed(4);
+                akaBalance = (parseFloat(akaBalance) + outputAmt).toFixed(2);
+                
+                mockAssets[0].balance = ethBalance;
+                mockAssets[1].balance = akaBalance;
+
+                document.getElementById('balance-pay').textContent = ethBalance;
+                document.getElementById('balance-receive').textContent = akaBalance;
+                document.getElementById('swap-input-amount').value = '';
+                document.getElementById('swap-output-amount').value = '';
+                
+                updateSwapButtonState();
+                if(!document.getElementById('portfolio-section').classList.contains('hidden')) {
+                    renderPortfolio();
+                }
+
+                // Compile formatted notification msg
+                const desc = i18n[currentLang].swapSuccessDesc.replace('{in}', inputAmt).replace('{out}', outputAmt);
+                showNotification(i18n[currentLang].swapSuccessTitle, desc, 'success');
+            }, 1500);
+        }
+
+        // Copy Helper
+        function copyToClipboard(elementId) {
+            const text = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification('Copied', 'Address saved to clipboard', 'info');
+            }).catch(err => {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showNotification('Copied', 'Address saved to clipboard', 'info');
+                } catch (e) {
+                    console.error('Lỗi', e);
+                }
+                document.body.removeChild(textArea);
+            });
+        }
+
+        // Global Alert Modal System
+        let notiTimeout;
+        function showNotification(title, message, type = 'info') {
+            const modal = document.getElementById('notification-modal');
+            const titleEl = document.getElementById('noti-title');
+            const msgEl = document.getElementById('noti-message');
+            const iconEl = document.getElementById('noti-icon');
+
+            titleEl.textContent = title;
+            msgEl.textContent = message;
+
+            iconEl.className = 'w-8 h-8 rounded-full flex items-center justify-center shrink-0 ';
+            if (type === 'success') {
+                iconEl.className += 'bg-green-500/20 text-green-400';
+                iconEl.innerHTML = '<i class="fa-solid fa-check"></i>';
+                modal.className = 'fixed top-24 left-1/2 z-[100] glass px-6 py-4 rounded-xl border border-green-500/30 flex items-center gap-4 shadow-xl';
+            } else if (type === 'warning') {
+                iconEl.className += 'bg-yellow-500/20 text-yellow-400';
+                iconEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+                modal.className = 'fixed top-24 left-1/2 z-[100] glass px-6 py-4 rounded-xl border border-yellow-500/30 flex items-center gap-4 shadow-xl';
+            } else {
+                iconEl.className += 'bg-akashic-500/20 text-akashic-400';
+                iconEl.innerHTML = '<i class="fa-solid fa-info"></i>';
+                modal.className = 'fixed top-24 left-1/2 z-[100] glass px-6 py-4 rounded-xl border border-akashic-500/30 flex items-center gap-4 shadow-xl';
+            }
+
+            modal.classList.add('show');
+            clearTimeout(notiTimeout);
+            notiTimeout = setTimeout(() => {
+                modal.classList.remove('show');
+            }, 4000);
+        }
+
+        // On document start init standard layout views
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCourses();
+            renderQuiz();
+            
+            const hash = window.location.hash.replace('#', '');
+            if(['dashboard', 'knowledge', 'swap', 'identity'].includes(hash)) {
+                switchTab(hash);
+            }
+        });
+    </script>
+</body>
+</html>
