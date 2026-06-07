@@ -1,1 +1,110 @@
 
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:#08111f;
+    color:white;
+    font-family:Arial,sans-serif;
+}
+
+header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:25px 10%;
+    border-bottom:1px solid rgba(255,255,255,.1);
+}
+
+.logo{
+    font-size:32px;
+    font-weight:bold;
+    color:#00d9ff;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    margin-left:25px;
+    transition:.3s;
+}
+
+nav a:hover{
+    color:#00d9ff;
+}
+
+.hero{
+    text-align:center;
+    padding:120px 20px;
+}
+
+.hero h1{
+    font-size:64px;
+    margin-bottom:20px;
+}
+
+.hero p{
+    max-width:900px;
+    margin:auto;
+    color:#cbd5e1;
+    font-size:22px;
+    line-height:1.6;
+}
+
+.button{
+    display:inline-block;
+    margin-top:40px;
+    padding:15px 35px;
+    background:#00d9ff;
+    color:black;
+    border-radius:12px;
+    text-decoration:none;
+    font-weight:bold;
+    transition:.3s;
+}
+
+.button:hover{
+    transform:translateY(-3px);
+}
+
+.section{
+    padding:100px 10%;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:25px;
+}
+
+.card{
+    background:#111c2d;
+    padding:30px;
+    border-radius:20px;
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-10px);
+}
+
+.card h2{
+    color:#00d9ff;
+    margin-bottom:15px;
+}
+
+footer{
+    text-align:center;
+    padding:50px;
+    border-top:1px solid rgba(255,255,255,.1);
+    color:#94a3b8;
+}
+
+#walletAddress{
+    margin-top:20px;
+    color:#00d9ff;
+    font-size:18px;
+}
