@@ -94,7 +94,8 @@ footer{
     border-top:1px solid rgba(255,255,255,.1);
 }
 </style>
-</head> <link rel="stylesheet" href="style.css">
+</head> <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+<script src="script.js"></script>
 <body> <script src="script.js"></script>
 
 <header>
@@ -108,8 +109,35 @@ footer{
 </nav>
 </header>
 
-<section class="hero"> <button class="button" id="connectButton">
-Connect Wallet
+<section class="hero"> <div class="card">
+
+<h2>AKA Token Dashboard</h2>
+
+<p><strong>Contract:</strong></p>
+
+<p id="contractAddress">
+0x962D4Cf024F687e5f04176ead33f461D371a7A0F
+</p>
+
+<br>
+
+<p><strong>Wallet:</strong></p>
+
+<p id="walletAddress">Not Connected</p>
+
+<br>
+
+<p><strong>AKA Balance:</strong></p>
+
+<p id="tokenBalance">0</p>
+
+<br>
+
+<p><strong>Total Supply:</strong></p>
+
+<p id="totalSupply">Loading...</p>
+
+</div>
 </button>
 
 <div id="walletAddress"></div>
