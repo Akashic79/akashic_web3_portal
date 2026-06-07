@@ -1,296 +1,152 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Akashic - RWA & IOPN Network Demo</title>
-    <!-- Tailwind CSS for modern and responsive styling -->
-    <script src="https://jsdelivr.net"></script>
-    <!-- FontAwesome for tech-centric visual icons -->
+    <title>Akashic Project - Next-Gen DeFi Platform</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cloudflare.com">
+    <script>
+        tailwind.config = {
+            theme {
+                extend {
+                    colors {
+                        iopn_blue: '#00D2FF',
+                        iopn_purple: '#0066FF',
+                        dark_bg: '#0A0E17',
+                        card_bg: '#121824'
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        .crypto-gradient {
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
-        }
-        .card-blur {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
+        @import url('https://googleapis.com');
+        body { font-family: 'Inter', sans-serif; background-color: #0A0E17; color: #E2E8F0; }
+        .glow-text { text-shadow: 0 0 10px rgba(0, 210, 255, 0.5); }
+        .gradient-border { border-image: linear-gradient(to right, #00D2FF, #0066FF) 1; }
     </style>
 </head>
-<body class="crypto-gradient text-gray-100 min-h-screen font-sans">
+<body class="overflow-x-hidden">
 
-    <!-- 1. NAVIGATION BAR -->
-    <nav class="border-b border-gray-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="bg-indigo-600 p-2 rounded-lg text-white font-bold text-xl tracking-wider">A</div>
-                <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">AKASHIC</span>
+    <!-- NAVIGATION -->
+    <nav class="sticky top-0 z-50 bg-dark_bg/80 backdrop-blur-md border-b border-gray-800 py-4 px-6 md:px-12 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-gradient-to-tr from-iopn_blue to-iopn_purple rounded-xl flex items-center justify-center shadow-lg shadow-iopn_blue/20">
+                <i class="fa-solid fa-infinity text-white text-xl animate-pulse"></i>
             </div>
-            <div class="hidden md:flex space-x-8 text-sm font-medium text-gray-300">
-                <a href="#hero" class="hover:text-indigo-400 transition">Home</a>
-                <a href="#rwa-market" class="hover:text-indigo-400 transition">RWA Market</a>
-                <a href="#neo-id" class="hover:text-indigo-400 transition">Neo ID (SBT)</a>
-                <a href="#roadmap" class="hover:text-indigo-400 transition">Roadmap</a>
-            </div>
-            <div>
-                <button id="connectWalletBtn" onclick="toggleWallet()" class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow-lg shadow-indigo-500/20 transition-all transform hover:-translate-y-0.5">
-                    <i class="fa-solid fa-wallet mr-2"></i> Connect Wallet
-                </button>
-            </div>
+            <span class="text-2xl font-bold tracking-wider text-white">AKASHIC</span>
         </div>
+        <div class="hidden md:flex space-x-8 text-sm font-medium">
+            <a href="#about" class="hover:text-iopn_blue transition">Tổng Quan</a>
+            <a href="#did" class="hover:text-iopn_blue transition">Định Danh DID</a>
+            <a href="#rwa" class="hover:text-iopn_blue transition">Mã Hóa RWA</a>
+            <a href="#roadmap" class="hover:text-iopn_blue transition">Lộ Trình</a>
+        </div>
+        <button class="bg-gradient-to-r from-iopn_blue to-iopn_purple text-dark_bg font-bold px-5 py-2 rounded-lg hover:opacity-90 transition text-sm shadow-md shadow-iopn_blue/10">
+            Kết Nối Ví
+        </button>
     </nav>
 
-    <!-- 2. HERO SECTION -->
-    <section id="hero" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center relative overflow-hidden">
-        <div class="absolute top-10 left-1/2 -translate-x-1/2 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl -z-10"></div>
-        <span class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 mb-6">
-            <span class="w-1.5 h-1.5 inline-block bg-indigo-400 rounded-full animate-pulse"></span> Next-Gen DeFi on IOPN
+    <!-- HERO SECTION -->
+    <header class="relative py-24 px-6 md:px-12 text-center max-w-5xl mx-auto flex flex-col items-center justify-center min-h-[80vh]">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,102,255,0.15),transparent_60%)] -z-10"></div>
+        <span class="px-4 py-1.5 bg-iopn_purple/20 text-iopn_blue rounded-full text-xs font-semibold uppercase tracking-widest border border-iopn_blue/30 mb-6">
+            Nền Tảng DeFi Thế Hệ Mới trên IOPN
         </span>
-        <h1 class="text-4xl sm:text-6xl font-black tracking-tight max-w-4xl mx-auto leading-tight mb-6">
-            Bridging <span class="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Real World Assets (RWA)</span> & the Internet of People
+        <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+            Định Hình Lại Tài Chính Với <br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-iopn_blue to-iopn_purple glow-text">Tài Sản Thực RWA</span>
         </h1>
-        <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-            A decentralized platform enabling you to digitize, fractionalize, and invest in Real World Assets like Real Estate, Bonds, or Fine Art at >10,000 TPS.
+        <p class="text-gray-400 text-lg md:text-xl max-w-2xl mb-10 leading-relaxed">
+            Dự án Akashic tích hợp sâu vào mạng Internet of People (IOPN), mang tài sản thế giới thực lên chuỗi thông qua định danh phi tập trung bảo mật cao.
         </p>
-        <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
-            <a href="#rwa-market" class="w-full sm:w-auto bg-white text-slate-900 font-semibold px-8 py-3.5 rounded-xl hover:bg-gray-100 transition shadow-lg text-center">Explore Ecosystem</a>
-            <button onclick="simulateStaking()" class="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-white font-semibold px-8 py-3.5 rounded-xl border border-gray-700 transition text-center">Join Staking</button>
+        <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+            <a href="#did" class="bg-gradient-to-r from-iopn_blue to-iopn_purple text-dark_bg font-bold px-8 py-3.5 rounded-xl shadow-lg shadow-iopn_blue/20 hover:scale-105 transition duration-300">
+                Khám Phá Công Nghệ
+            </a>
+            <a href="#roadmap" class="border border-gray-700 bg-gray-900/40 text-white px-8 py-3.5 rounded-xl hover:bg-gray-800/60 transition duration-300">
+                Xem Lộ Trình
+            </a>
+        </div>
+    </header>
+
+    <!-- CORE ARCHITECTURE -->
+    <section id="about" class="py-20 px-6 md:px-12 bg-card_bg/30 border-y border-gray-900">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-white mb-4">Kiến Trúc Cốt Lõi Akashic</h2>
+                <p class="text-gray-400 max-w-xl mx-auto">Sự kết hợp hoàn hảo giữa hạ tầng định danh con người và công nghệ số hóa tài sản.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-card_bg p-8 rounded-2xl border border-gray-800 hover:border-iopn_blue/50 transition duration-300">
+                    <div class="w-12 h-12 bg-iopn_blue/10 text-iopn_blue rounded-xl flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-network-wired text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Hạ Tầng IOPN</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Vận hành trên Internet of People, tối ưu hóa quyền riêng tư và tốc độ xử lý giao dịch ngang hàng p2p.</p>
+                </div>
+                <div class="bg-card_bg p-8 rounded-2xl border border-gray-800 hover:border-iopn_purple/50 transition duration-300">
+                    <div class="w-12 h-12 bg-iopn_purple/10 text-iopn_purple rounded-xl flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-id-card text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Định Danh DID</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Hợp đồng thông minh định danh giúp xác minh chủ thể pháp lý mà không làm lộ dữ liệu cá nhân nhạy cảm.</p>
+                </div>
+                <div class="bg-card_bg p-8 rounded-2xl border border-gray-800 hover:border-iopn_blue/50 transition duration-300">
+                    <div class="w-12 h-12 bg-iopn_blue/10 text-iopn_blue rounded-xl flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-building-shield text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Mã Hóa RWA</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Hợp đồng mã hóa biến bất động sản, trái phiếu, hàng hóa thành các token thanh khoản cao trong DeFi.</p>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- 3. NEO ID INTEGRATION (SOULBOUND IDENTITY) -->
-    <section id="neo-id" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div class="card-blur p-8 rounded-3xl max-w-3xl mx-auto grid md:grid-cols-2 gap-8 items-center">
+    <!-- SMART CONTRACTS CODE DEMO -->
+    <section id="did" class="py-20 px-6 md:px-12 max-w-6xl mx-auto">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-                <h2 class="text-2xl font-bold mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-id-card text-purple-400"></i> Neo ID Verification
-                </h2>
-                <p class="text-sm text-gray-400 mb-6 leading-relaxed">
-                    The Soulbound Identity contract binds verified KYC credentials directly to your wallet via a non-transferable Soulbound Token (SBT). This is mandatory to unlock exclusive RWA investment pools.
+                <span class="text-xs font-bold uppercase tracking-widest text-iopn_blue mb-2 block">Cơ Chế Bảo Mật</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Hợp Đồng Thông Minh Định Danh Phi Tập Trung (DID)</h2>
+                <p class="text-gray-400 mb-6 leading-relaxed">
+                    Mỗi thực thể tham gia hệ sinh thái Akashic được cấp một định danh duy nhất dựa trên IOPN. Hợp đồng DID chịu trách nhiệm quản lý quyền truy cập, tuân thủ KYC/AML phi tập trung và bảo vệ dữ liệu người dùng qua bằng chứng không tri thức (ZKP).
                 </p>
-                <button id="kycBtn" onclick="startKYC()" class="bg-purple-600 hover:bg-purple-700 text-sm font-semibold px-5 py-2.5 rounded-xl transition shadow-lg shadow-purple-600/20">
-                    Activate Neo ID (SBT)
-                </button>
+                <ul class="space-y-3 text-sm text-gray-300">
+                    <li class="flex items-center"><i class="fa-solid fa-circle-check text-iopn_blue mr-3"></i> Tương thích hoàn toàn chuẩn W3C DID.</li>
+                    <li class="flex items-center"><i class="fa-solid fa-circle-check text-iopn_blue mr-3"></i> Xác thực không lưu trữ dữ liệu tập trung.</li>
+                    <li class="flex items-center"><i class="fa-solid fa-circle-check text-iopn_blue mr-3"></i> Phân quyền động cho các ứng dụng dApp bên thứ ba.</li>
+                </ul>
             </div>
-            <div class="bg-slate-900/60 p-5 rounded-2xl border border-gray-800 flex flex-col items-center justify-center text-center h-48 relative overflow-hidden">
-                <div id="sbtStatusIcon" class="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center text-2xl text-gray-500 mb-3 border border-gray-700">
-                    <i class="fa-solid fa-lock"></i>
+            <div class="bg-gray-950 rounded-2xl border border-gray-800 overflow-hidden shadow-2xl">
+                <div class="bg-gray-900 px-4 py-3 border-b border-gray-800 flex justify-between items-center text-xs text-gray-400">
+                    <span>AkashicDID.sol (Demo)</span>
+                    <span class="w-3 h-3 rounded-full bg-green-500"></span>
                 </div>
-                <div id="sbtStatusText" class="text-sm font-semibold text-gray-400">Neo ID Unverified</div>
-                <div id="sbtAddress" class="text-xs text-gray-500 font-mono mt-1 hidden">Wallet: 0xAkashic...7f92</div>
+                <pre class="p-6 text-xs md:text-sm text-gray-300 overflow-x-auto font-mono leading-relaxed">
+<span class="text-blue-400">pragma solidity</span> ^0.8.20;
+
+<span class="text-purple-400">contract</span> <span class="text-yellow-400">AkashicIdentity</span> {
+    <span class="text-purple-400">struct</span> <span class="text-teal-400">Identity</span> {
+        <span class="text-purple-400">string</span> iopnDidUri;
+        <span class="text-purple-400">bool</span> isVerified;
+        <span class="text-purple-400">uint256</span> updatedTimestamp;
+    }
+
+    <span class="text-purple-400">mapping</span>(<span class="text-purple-400">address</span> => <span class="text-teal-400">Identity</span>) <span class="text-purple-400">private</span> _identities;
+
+    <span class="text-purple-400">event</span> <span class="text-yellow-400">DIDRegistered</span>(<span class="text-purple-400">address</span> <span class="text-blue-400">indexed</span> user, <span class="text-purple-400">string</span> didUri);
+
+    <span class="text-purple-400">function</span> <span class="text-yellow-400">registerDID</span>(<span class="text-purple-400">string</span> <span class="text-purple-400">memory</span> _didUri) <span class="text-purple-400">public</span> {
+        _identities[msg.sender] = <span class="text-teal-400">Identity</span>(_didUri, <span class="text-purple-400">true</span>, block.timestamp);
+        <span class="text-purple-400">emit</span> <span class="text-yellow-400">DIDRegistered</span>(msg.sender, _didUri);
+    }
+}</pre>
             </div>
         </div>
     </section>
 
-    <!-- 4. FRACTIONALIZED RWA MARKETPLACE -->
-    <section id="rwa-market" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold tracking-tight mb-3">Live RWA Offerings</h2>
-            <p class="text-sm text-gray-400">Own a fraction of high-value assets with minimal capital via fRWA tokens</p>
-        </div>
-
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Asset 1 -->
-            <div class="card-blur rounded-2xl overflow-hidden hover:border-indigo-500/50 transition duration-300 flex flex-col">
-                <div class="h-48 bg-slate-800 relative">
-                    <img src="https://unsplash.com" alt="Real Estate" class="w-full h-full object-cover opacity-80">
-                    <span class="absolute top-4 right-4 bg-indigo-600 text-xs font-bold px-2.5 py-1 rounded-full">Real Estate</span>
-                </div>
-                <div class="p-6 flex-1 flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-lg font-bold mb-2">Akashic Commercial Tower</h3>
-                        <p class="text-xs text-gray-400 font-mono mb-4">Token: $AKA-PROP-01</p>
-                        <div class="grid grid-cols-2 gap-4 mb-4 bg-slate-900/50 p-3 rounded-xl border border-gray-800 text-xs">
-                            <div>
-                                <span class="text-gray-500 block mb-1">Asset Valuation</span>
-                                <span class="font-bold text-gray-200">$5,000,000</span>
-                            </div>
-                            <div>
-                                <span class="text-gray-500 block mb-1">Target Yield</span>
-                                <span class="font-bold text-emerald-400">12.5% / APY</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <button onclick="investRWA('Akashic Tower')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-2.5 rounded-xl transition">
-                            Invest in Fractions
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Asset 2 -->
-            <div class="card-blur rounded-2xl overflow-hidden hover:border-indigo-500/50 transition duration-300 flex flex-col">
-                <div class="h-48 bg-slate-800 relative">
-                    <img src="https://unsplash.com" alt="Bonds" class="w-full h-full object-cover opacity-80">
-                    <span class="absolute top-4 right-4 bg-purple-600 text-xs font-bold px-2.5 py-1 rounded-full">Bonds</span>
-                </div>
-                <div class="p-6 flex-1 flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-lg font-bold mb-2">Renewable Green Energy Bond</h3>
-                        <p class="text-xs text-gray-400 font-mono mb-4">Token: $AKA-BOND-02</p>
-                        <div class="grid grid-cols-2 gap-4 mb-4 bg-slate-900/50 p-3 rounded-xl border border-gray-800 text-xs">
-                            <div>
-                                <span class="text-gray-500 block mb-1">Asset Valuation</span>
-                                <span class="font-bold text-gray-200">$2,500,000</span>
-                            </div>
-                            <div>
-                                <span class="text-gray-500 block mb-1">Target Yield</span>
-                                <span class="font-bold text-emerald-400">8.2% / APY</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <button onclick="investRWA('Green Energy Bond')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-2.5 rounded-xl transition">
-                            Invest in Fractions
-                        </button>
-                    </div>
-
-
-
-
-
-
-Fine Art
-
-
-
-Digital Oil Painting Collection
-Token: $AKA-ART-03
-
-
-Asset Valuation
-$850,000
-
-
-Target Yield
-15.0% / APY
-
-
-
-
-
-Invest in Fractions
-
-
-
-
-
-
-
-
-Project Roadmap
-
-
-
-PHASE 1
-Platform Genesis
-
-IOPN Infrastructure integration
-Smart Contract Audit
-
-
-
-
-PHASE 2 In Progress
-
-Beta Version
-
-Testnet public deployment
-Fractionalized asset pilots
-
-
-
-PHASE 3
-Official Mainnet
-
-• $AKA Utility Token Launch
-• Secondary RWA trading market
-
-
-
-PHASE 4
-Ecosystem Expansion
-
-• Institutional TradFi partnerships
-• Community Governance via DAO
-
-
-
-
-
-© 2026 Akashic Project (IOPN Eco). Prototype Interface Demo.
-
-
-let isWalletConnected = false;
-let isKYCVerified = false;
-function toggleWallet() {
-const btn = document.getElementById('connectWalletBtn');
-if (!isWalletConnected) {
-isWalletConnected = true;
-btn.innerHTML = <i class="fa-solid fa-circle-check text-emerald-400 mr-2"></i> 0xAkas...7f92;
-btn.className = "bg-slate-800 border border-gray-700 text-gray-200 text-sm font-semibold px-5 py-2.5 rounded-xl transition";
-alert("Successfully connected to the IOPN OPN-Chain network wallet!");
-} else {
-isWalletConnected = false;
-isKYCVerified = false;
-btn.innerHTML = <i class="fa-solid fa-wallet mr-2"></i> Connect Wallet;
-btn.className = "bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow-lg transition";
-// Reset Neo ID UI element states on disconnect
-document.getElementById('sbtStatusIcon').innerHTML = <i class="fa-solid fa-lock"></i>;
-document.getElementById('sbtStatusIcon').className = "w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center text-2xl text-gray-500 mb-3 border border-gray-700";
-document.getElementById('sbtStatusText').innerText = "Neo ID Unverified";
-document.getElementById('sbtAddress').classList.add('hidden');
-document.getElementById('kycBtn').innerText = "Activate Neo ID (SBT)";
-document.getElementById('kycBtn').disabled = false;
-}
-}
-function startKYC() {
-if (!isWalletConnected) {
-alert("Please connect your Web3 wallet prior to activating Neo ID verification.");
-return;
-}
-const btn = document.getElementById('kycBtn');
-btn.innerText = "Minting on-chain identity...";
-btn.disabled = true;
-setTimeout(() => {
-isKYCVerified = true;
-document.getElementById('sbtStatusIcon').innerHTML = <i class="fa-solid fa-shield-halved"></i>;
-document.getElementById('sbtStatusIcon').className = "w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center text-2xl text-emerald-400 mb-3 border border-emerald-500/30";
-document.getElementById('sbtStatusText').innerText = "Neo ID Active (SBT Minted)";
-document.getElementById('sbtAddress').classList.remove('hidden');
-btn.innerText = "Identity Verified";
-alert("Smart contract successfully minted your Soulbound Identity Token (SBT) into your wallet!");
-}, 1500);
-}
-function investRWA(assetName) {
-if (!isWalletConnected) {
-alert("Transaction Error: Please connect your Web3 wallet.");
-return;
-}
-if (!isKYCVerified) {
-alert("Regulatory Block: Missing Soulbound Identity (SBT). Complete Neo ID verification to unlock asset investment pools!");
-return;
-}
-alert(Fractional order for [${assetName}] broadcasted to OPN-Chain. Please approve the incoming transaction request inside your wallet.);
-}
-function simulateStaking() {
-if (!isWalletConnected) {
-alert("Please connect your wallet to access $AKA staking structures.");
-return;
-}
-alert("Staking Engine: Locking $AKA to allocate Real Yield distribution from real-world asset operational revenue.");
-}
-
-
-
-<FollowUp>
-What would you like to build or modify next to improve this English prototype:
-* **Add a chart component** using JavaScript to showcase historical asset yield curves?
-* **Expand the portfolio view** so users can trace their active fRWA token balances dynamically?
-* **Write a technical guide** outlining how to host this site directly online via Vercel or GitHub Pages?
-</FollowUp>
-
-
+    <!-- RWA TOKENIZATION -->
