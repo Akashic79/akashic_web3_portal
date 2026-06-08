@@ -1,254 +1,122 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AKASHIC | RWA & DeFi Ecosystem</title>
+<title>AKASHIC</title>
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+<link rel="stylesheet" href="style.css">
 
-body{
-    background:#08111f;
-    color:white;
-    font-family:Arial,sans-serif;
-}
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+</head>
 
-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:25px 10%;
-    border-bottom:1px solid rgba(255,255,255,.1);
-}
-
-.logo{
-    font-size:32px;
-    font-weight:bold;
-    color:#00d9ff;
-}
-
-nav a{
-    color:white;
-    text-decoration:none;
-    margin-left:25px;
-}
-
-.hero{
-    text-align:center;
-    padding:120px 20px;
-}
-
-.hero h1{
-    font-size:64px;
-    margin-bottom:20px;
-}
-
-.hero p{
-    font-size:22px;
-    color:#cbd5e1;
-    max-width:900px;
-    margin:auto;
-}
-
-.button{
-    display:inline-block;
-    margin-top:40px;
-    padding:15px 35px;
-    background:#00d9ff;
-    color:black;
-    text-decoration:none;
-    border-radius:12px;
-    font-weight:bold;
-}
-
-.section{
-    padding:90px 10%;
-}
-
-.cards{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:25px;
-}
-
-.card{
-    background:#111c2d;
-    padding:30px;
-    border-radius:20px;
-}
-
-.card h2{
-    margin-bottom:15px;
-    color:#00d9ff;
-}
-
-footer{
-    text-align:center;
-    padding:40px;
-    border-top:1px solid rgba(255,255,255,.1);
-}
-</style>
-</head> <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-<script src="script.js"></script>
-<body> <script src="script.js"></script>
-
-<header>
-<div class="logo">AKASHIC</div>
+<body>
 
 <nav>
-<a href="#">Home</a>
-<a href="#">Ecosystem</a>
-<a href="#">Token</a>
-<a href="#">Roadmap</a>
-</nav>
-</header>
+<div class="logo">AKASHIC</div>
 
-<section class="hero"> <button
-id="connectButton"
-class="btn">
+<ul>
+<li>RWA</li>
+<li>DeFi</li>
+<li>Token</li>
+<li>Roadmap</li>
+</ul>
+
+<button id="connectButton">
 Connect Wallet
-</button> 
-    
-    <div class="card">
-
-<h2>AKA Token Dashboard</h2>
-
-<p><strong>Contract:</strong></p>
-
-<p id="contractAddress">
-0x962D4Cf024F687e5f04176ead33f461D371a7A0F
-</p>
-
-<br>
-
-<p><strong>Wallet:</strong></p>
-
-<p id="walletAddress">Not Connected</p>
-
-<br>
-
-<p><strong>AKA Balance:</strong></p>
-
-<p id="tokenBalance">0</p>
-
-<br>
-
-<p><strong>Total Supply:</strong></p>
-
-<p id="totalSupply">Loading...</p>
-
-</div>
 </button>
+</nav>
 
-<div id="walletAddress"></div>
+<section class="hero">
 
-<h1>Building the Future of RWA and DeFi on IOPN</h1>
+<h1>
+Real World Assets Infrastructure
+for the Next Financial Era
+</h1>
 
 <p>
-Akashic is a next-generation ecosystem connecting Real World Assets with decentralized finance infrastructure powered by the IOPN Network.
+Tokenize. Govern. Scale.
+Powered by OPN Network
 </p>
-
-<a class="button" href="#">
-Launch App
-</a>
 
 </section>
 
-<section class="section">
-
-<div class="cards">
+<section class="dashboard">
 
 <div class="card">
-<h2>Real World Assets</h2>
-<p>
-Transform physical and financial assets into secure blockchain-based digital assets.
+
+<h2>Wallet</h2>
+
+<p id="walletAddress">
+Not Connected
 </p>
+
 </div>
 
 <div class="card">
-<h2>DeFi Infrastructure</h2>
-<p>
-Staking, lending, liquidity pools and yield generation for long-term growth.
+
+<h2>AKA Balance</h2>
+
+<p id="tokenBalance">
+0
 </p>
+
 </div>
 
 <div class="card">
-<h2>Governance</h2>
-<p>
-AKA Token holders participate in ecosystem decisions and protocol upgrades.
+
+<h2>Total Supply</h2>
+
+<p id="totalSupply">
+Loading...
 </p>
+
 </div>
 
 <div class="card">
-<h2>Powered by IOPN</h2>
-<p>
-Scalable and secure blockchain infrastructure designed for the future economy.
+
+<h2>Owner</h2>
+
+<p id="ownerAddress">
+Loading...
 </p>
+
+</div>
+
+</section>
+
+<section class="ecosystem">
+
+<h2>Ecosystem</h2>
+
+<div class="grid">
+
+<div class="card">
+<h3>RWA Layer</h3>
+<p>Real Estate</p>
+<p>Commodities</p>
+<p>Financial Assets</p>
+</div>
+
+<div class="card">
+<h3>DeFi Layer</h3>
+<p>Staking</p>
+<p>Lending</p>
+<p>Yield</p>
+</div>
+
+<div class="card">
+<h3>Governance</h3>
+<p>DAO</p>
+<p>Treasury</p>
+<p>Voting</p>
 </div>
 
 </div>
 
 </section>
 
-<section class="section">
-
-<h1>AKA Token</h1>
-
-<br><br>
-
-<p>Name : Akashic</p>
-<p>Symbol : AKA</p>
-<p>Standard : ERC-20</p>
-<p>Utility : Governance and Ecosystem</p>
-
-</section>
-
-<section class="section">
-
-<h1>Roadmap</h1>
-
-<br><br>
-
-<h3>2025</h3>
-<p>Smart Contract Deployment</p>
-<p>Website Launch</p>
-<p>Community Building</p>
-
-<br>
-
-<h3>2026</h3>
-<p>RWA Platform</p>
-<p>Staking System</p>
-<p>DeFi Integration</p>
-
-<br>
-
-<h3>2027</h3>
-<p>DAO Governance</p>
-<p>Cross-chain Expansion</p>
-<p>Institutional Partnerships</p>
-
-</section>
-
-<footer>
-
-AKASHIC
-
-<br><br>
-
-RWA • DeFi • IOPN Ecosystem
-
-<br><br>
-
-© 2025 Akashic Foundation
-
-</footer>
+<script src="script.js"></script>
 
 </body>
 </html>
