@@ -25,6 +25,7 @@ let provider;
 let signer;
 let contract;
 
+
 // =========================
 // Connect Wallet
 // =========================
@@ -33,9 +34,9 @@ async function connectWallet() {
 
     if (!window.ethereum) {
 
-        alert("MetaMask not found");
-        return;
+        alert("Please install MetaMask");
 
+        return;
     }
 
     try {
@@ -54,7 +55,8 @@ async function connectWallet() {
 
         document.getElementById(
             "walletAddress"
-        ).innerText = address;
+        ).innerText =
+            shortenAddress(address);
 
         contract = new ethers.Contract(
 
@@ -64,254 +66,131 @@ async function connectWallet() {
 
         );
 
-        loadDashboard(address);
+        await loadDashboard(address);
+
+        document.getElementById(
+            "connectButton"
+        ).innerText =
+            "Connected";
 
     }
 
     catch (error) {
 
-        console.error(error);
+        console.log(error);
 
     }
 
 }
 
-    console.log(error);
-
-}
-```
-
-}
 
 // =========================
 // Dashboard
 // =========================
 
-async function loadDashboard(address){
+async function loadDashboard(address) {
 
-```
-try{
+    try {
 
-    const symbol =
-    await contract.symbol();
+        const symbol =
+            await contract.symbol();
 
-    const decimals =
-    await contract.decimals();
+        const decimals =
+            await contract.decimals();
 
-    const balance =
-    await contract.balanceOf(
-        address
-    );
+        const balance =
+            await contract.balanceOf(address);
 
-    document.getElementById(
-        "tokenBalance"
-    ).innerText =
+        document.getElementById(
+            "tokenBalance"
+        ).innerText =
 
-    Number(
+            Number(
 
-        ethers.utils.formatUnits(
-            balance,
-            decimals
-        )
+                ethers.utils.formatUnits(
+                    balance,
+                    decimals
+                )
 
-    ).toLocaleString()
+            ).toLocaleString()
 
-    +
+            +
 
-    " "
+            " "
 
-    +
+            +
 
-    symbol;
+            symbol;
 
 
-    const totalSupply =
-    await contract.totalSupply();
 
-    document.getElementById(
-        "totalSupply"
-    ).innerText =
+        const totalSupply =
+            await contract.totalSupply();
 
-    Number(
+        document.getElementById(
+            "totalSupply"
+        ).innerText =
 
-        ethers.utils.formatUnits(
-            totalSupply,
-            decimals
-        )
+            Number(
 
-    ).toLocaleString()
+                ethers.utils.formatUnits(
+                    totalSupply,
+                    decimals
+                )
 
-    +
+            ).toLocaleString()
 
-    " "
+            +
 
-    +
+            " "
 
-    symbol;
+            +
+
+            symbol;
 
 
-    const owner =
-    await contract.owner();
 
-    document.getElementById(
-        "ownerAddress"
-    ).innerText =
-    shortenAddress(
-        owner
-    );
+        const owner =
+            await contract.owner();
 
-}
+        document.getElementById(
+            "ownerAddress"
+        ).innerText =
+            shortenAddress(owner);
 
-catch(error){
+    }
 
-    console.log(error);
+    catch (error) {
 
-}
-```
+        console.log(error);
+
+    }
 
 }
 
-// =========================
-// Transfer Token
-// =========================
-
-async function transferToken(){
-
-```
-try{
-
-    const to =
-    document.getElementById(
-        "receiver"
-    ).value;
-
-    const amount =
-    document.getElementById(
-        "amount"
-    ).value;
-
-    const decimals =
-    await contract.decimals();
-
-    const contractSigner =
-    contract.connect(
-        signer
-    );
-
-    const tx =
-    await contractSigner.transfer(
-
-        to,
-
-        ethers.utils.parseUnits(
-            amount,
-            decimals
-        )
-
-    );
-
-    await tx.wait();
-
-    alert(
-        "Transfer Success"
-    );
-
-}
-
-catch(error){
-
-    console.log(error);
-
-}
-```
-
-}
-
-// =========================
-// Mint Token
-// =========================
-
-async function mintToken(){
-
-```
-try{
-
-    const to =
-    document.getElementById(
-        "mintAddress"
-    ).value;
-
-    const amount =
-    document.getElementById(
-        "mintAmount"
-    ).value;
-
-    const decimals =
-    await contract.decimals();
-
-    const contractSigner =
-    contract.connect(
-        signer
-    );
-
-    const tx =
-    await contractSigner.mint(
-
-        to,
-
-        ethers.utils.parseUnits(
-            amount,
-            decimals
-
-        )
-
-    );
-
-    await tx.wait();
-
-    alert(
-        "Mint Success"
-    );
-
-}
-
-catch(error){
-
-    console.log(error);
-
-}
-```
-
-}
 
 // =========================
 // Address Format
 // =========================
 
-function shortenAddress(address){
+function shortenAddress(address) {
 
-```
-return (
+    return (
 
-    address.substring(
-        0,
-        6
-    )
+        address.substring(0, 6)
 
-    +
+        +
 
-    "..."
+        "..."
 
-    +
+        +
 
-    address.substring(
-        38
-    )
+        address.substring(38)
 
-);
-```
+    );
 
 }
+
 
 // =========================
 // Auto Reconnect
@@ -319,43 +198,42 @@ return (
 
 window.addEventListener(
 
-```
-"load",
+    "load",
 
-async ()=>{
+    async () => {
 
-    if(window.ethereum){
+        if (window.ethereum) {
 
-        try{
+            try {
 
-            const accounts =
-            await ethereum.request({
+                const accounts =
+                    await window.ethereum.request({
 
-                method:
-                "eth_accounts"
+                        method:
+                            "eth_accounts"
 
-            });
+                    });
 
-            if(accounts.length > 0){
+                if (accounts.length > 0) {
 
-                connectWallet();
+                    connectWallet();
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.log(error);
 
             }
 
         }
 
-        catch(error){
-
-            console.log(error);
-
-        }
-
     }
 
-}
-```
-
 );
+
 
 // =========================
 // Button Event
@@ -363,14 +241,12 @@ async ()=>{
 
 document
 .getElementById(
-"connectButton"
+    "connectButton"
 )
 .addEventListener(
 
-```
-"click",
+    "click",
 
-connectWallet
-```
+    connectWallet
 
 );
