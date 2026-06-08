@@ -29,69 +29,52 @@ let contract;
 // Connect Wallet
 // =========================
 
-async function connectWallet(){
+async function connectWallet() {
 
-```
-if(!window.ethereum){
+    if (!window.ethereum) {
 
-    alert("Please install MetaMask");
-
-    return;
-
-}
-
-try{
-
-    provider =
-    new ethers.providers.Web3Provider(
-        window.ethereum
-    );
-
-    await provider.send(
-        "eth_requestAccounts",
-        []
-    );
-
-    signer =
-    provider.getSigner();
-
-    const address =
-    await signer.getAddress();
-
-    document.getElementById(
-        "walletAddress"
-    ).innerText =
-    shortenAddress(address);
-
-    const network =
-    await provider.getNetwork();
-
-    if(network.chainId !== 984){
-
-        alert(
-            "Please switch to OPN Testnet (Chain ID 984)"
-        );
+        alert("MetaMask not found");
+        return;
 
     }
 
-    contract =
-    new ethers.Contract(
+    try {
 
-        CONTRACT_ADDRESS,
+        provider = new ethers.providers.Web3Provider(window.ethereum);
 
-        ABI,
+        await provider.send(
+            "eth_requestAccounts",
+            []
+        );
 
-        signer
+        signer = provider.getSigner();
 
-    );
+        const address =
+            await signer.getAddress();
 
-    await loadDashboard(
-        address
-    );
+        document.getElementById(
+            "walletAddress"
+        ).innerText = address;
+
+        contract = new ethers.Contract(
+
+            CONTRACT_ADDRESS,
+            ABI,
+            signer
+
+        );
+
+        loadDashboard(address);
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+    }
 
 }
-
-catch(error){
 
     console.log(error);
 
