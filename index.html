@@ -1,12 +1,16 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<title>AKASHIC | Real World Assets Infrastructure</title>
+<title>
+AKASHIC | Real World Assets Infrastructure
+</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -14,100 +18,51 @@
 href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
 rel="stylesheet">
 
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+
 </head>
 
 <body>
 
-<!-- Background -->
 <div class="gradient-bg"></div>
 
 <!-- Navbar -->
 
 <nav>
-    <div class="logo">AKASHIC</div>
 
-    <ul>
-        <li><a href="#ecosystem">Ecosystem</a></li>
-        <li><a href="#rwa">RWA</a></li>
-        <li><a href="#defi">DeFi</a></li>
-        <li><a href="#roadmap">Roadmap</a></li>
-        <li><a href="#token">Token</a></li>
-    </ul>
+<div class="logo">
 
-    <button id="connectButton">
-        Connect Wallet
-    </button>
+AKASHIC
+
+</div>
+
+<ul>
+
+<li><a href="#ecosystem">Ecosystem</a></li>
+
+<li><a href="#tokenomics">Tokenomics</a></li>
+
+<li><a href="#roadmap">Roadmap</a></li>
+
+<li><a href="#faq">FAQ</a></li>
+
+</ul>
+
+<button id="connectButton">
+
+Connect Wallet
+
+</button>
+
 </nav>
 
 <!-- Hero -->
 
- <section class="dashboard">
-
-<h2>Protocol Dashboard</h2>
-
-<div class="cards">
-
-<div class="card">
-<h3>Wallet</h3>
-<p id="walletAddress">
-Not Connected
-</p>
-</div>
-
-<div class="card">
-<h3>AKA Balance</h3>
-<p id="balance">
-0 AKA
-</p>
-</div>
-
-<div class="card">
-<h3>Total Supply</h3>
-<p id="supply">
-0
-</p>
-</div>
-
-<div class="card">
-<h3>Network</h3>
-<p>
-OPN Testnet
-</p>
-</div>
-
-<div class="card">
-<h3>Chain ID</h3>
-<p>
-984
-</p>
-</div>
-
-<div class="card">
-<h3>Status</h3>
-<p>
-Active
-</p>
-</div>
-
-</div>
-
-</section>   
-    
 <section class="hero">
 
-<a
-class="secondary-btn"
-href="https://testnet.iopn.tech/"
-target="_blank">
-
-Explorer
-
-</a>
-  
 <h1>
 
-Building the Future of
-<br>
+Building the Future of <br>
 Real World Assets
 
 </h1>
@@ -122,175 +77,19 @@ Powered by OPN Network
 
 </p>
 
-<div class="hero-buttons">
-
-<a class="primary-btn">
-
-Launch App
-
-</a>
-
-<a class="secondary-btn">
-
-Whitepaper
-
-</a>
-
-</div>
-
-</section>
-
-<!-- Statistics -->
-
-<section class="stats">
-
-<div class="stat-card">
-
-<h2>$500M+</h2>
-
-<p>Assets Tokenized</p>
-
-</div>
-
-<div class="stat-card">
-
-<h2>100K+</h2>
-
-<p>Community Members</p>
-
-</div>
-
-<div class="stat-card">
-
-<h2>50+</h2>
-
-<p>Partners</p>
-
-</div>
-
-<div class="stat-card">
-
-<h2>100%</h2>
-
-<p>Transparency</p>
-
-</div>
-
 </section>
 
 <!-- Dashboard -->
 
-<div class="card">
-
-<h3>Network</h3>
-
-<p>
-
-OPN Testnet
-
-</p>
-
-<p>
-
-Chain ID : 984
-
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>Contract</h3>
-
-<p>
-
-Verified ERC20
-
-</p>
-
-<a
-href="#">
-
-View Explorer
-
-</a>
-
-</div>
-  
-<section class="dashboard" id="token">
+<section class="dashboard">
 
 <h2>
 
-<section>
-
-<h2>
-
-Whitepaper
+Protocol Dashboard
 
 </h2>
 
-<div class="card">
-
-<p>
-
-AKASHIC is building the future infrastructure
-for tokenized real-world assets and decentralized finance.
-
-</p>
-
-</div>
-
-</section>
-
-<footer>
-
-<h2>
-
-AKASHIC
-
-</h2>
-
-<p>
-
-Real World Assets Infrastructure
-
-</p>
-
-<div>
-
-<a href="#">
-
-GitHub
-
-</a>
-
-<a href="#">
-
-Telegram
-
-</a>
-
-<a href="#">
-
-X
-
-</a>
-
-<a href="#">
-
-Docs
-
-</a>
-
-</div>
-
-</footer>
-  
-AKASHIC Dashboard
-
-</h2>
-
-<div class="dashboard-grid">
+<div class="cards">
 
 <div class="card">
 
@@ -310,7 +109,7 @@ Not Connected
 
 <p id="tokenBalance">
 
-0
+0 AKA
 
 </p>
 
@@ -336,29 +135,29 @@ Loading...
 
 Loading...
 
-<section class="stats">
+</p>
 
-<div class="stat-card">
-<h2>100M</h2>
-<p>AKA Supply</p>
 </div>
 
-<div class="stat-card">
-<h2>$50M+</h2>
-<p>Target TVL</p>
+<div class="card">
+
+<h3>Network</h3>
+
+<p>
+
+OPN Testnet
+
+</p>
+
 </div>
 
-<div class="stat-card">
-<h2>984</h2>
-<p>OPN Chain ID</p>
-</div>
+<div class="card">
 
-<div class="stat-card">
-<h2>2025</h2>
-<p>Mainnet Vision</p>
-</div>
+<h3>Chain ID</h3>
 
-</section>
+<p>
+
+984
 
 </p>
 
@@ -370,7 +169,99 @@ Loading...
 
 <!-- Ecosystem -->
 
-<section id="tokenomics">
+<section
+class="ecosystem"
+id="ecosystem">
+
+<h2>
+
+Ecosystem
+
+</h2>
+
+<div class="cards">
+
+<div class="card">
+
+<h3>
+
+RWA Layer
+
+</h3>
+
+<p>
+
+Real Estate <br>
+Treasury Assets <br>
+Institutional Securities
+
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>
+
+DeFi Layer
+
+</h3>
+
+<p>
+
+Staking <br>
+Lending <br>
+Yield
+
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>
+
+Governance
+
+</h3>
+
+<p>
+
+DAO <br>
+Treasury <br>
+Community
+
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>
+
+AI Layer
+
+</h3>
+
+<p>
+
+AKASHIC AI <br>
+Analytics <br>
+Automation
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Tokenomics -->
+
+<section
+class="tokenomics"
+id="tokenomics">
 
 <h2>
 
@@ -384,7 +275,11 @@ Tokenomics
 
 <h1>40%</h1>
 
-<p>Treasury</p>
+<p>
+
+Treasury
+
+</p>
 
 </div>
 
@@ -392,7 +287,11 @@ Tokenomics
 
 <h1>30%</h1>
 
-<p>Ecosystem</p>
+<p>
+
+Ecosystem
+
+</p>
 
 </div>
 
@@ -400,75 +299,7 @@ Tokenomics
 
 <h1>20%</h1>
 
-<p>Community</p>
-
-</div>
-
-<div class="card">
-
-<h1>10%</h1>
-
-<p>Liquidity</p>
-
-</div>
-
-</div>
-
-</section>
-<
-section id="ecosystem">
-
-<h2>
-
-Ecosystem
-
-<section class="ecosystem">
-
-<h2>Ecosystem</h2>
-
-<div class="cards">
-
-<div class="card">
-
-<h3>RWA Layer</h3>
-
 <p>
-
-Real Estate
-
-Treasury Assets
-
-Institutional Securities
-
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>DeFi Layer</h3>
-
-<p>
-
-Lending
-
-Yield
-
-Staking
-
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>Governance</h3>
-
-<p>
-
-DAO
-
-Treasury
 
 Community
 
@@ -478,329 +309,11 @@ Community
 
 <div class="card">
 
-<h3>AI Layer</h3>
-
-<p>
-
-AKASHIC AI
-
-Analytics
-
-Automation
-
-</p>
-
-</div>
-
-</div>
-
-</section>
-    
-<section class="tokenomics">
-
-<h2>Tokenomics</h2>
-
-<div class="token-grid">
-
-<div class="card">
-<h3>Total Supply</h3>
-<p>100,000,000 AKA</p>
-</div>
-
-<div class="card">
-<h3>Treasury</h3>
-<p>40%</p>
-</div>
-
-<div class="card">
-
-<h3>RWA Layer</h3>
-
-<section>
-
-<h2>Tokenomics</h2>
-
-<div class="cards">
-
-<div class="card">
-
-<h1>40%</h1>
-
-<p>Treasury</p>
-
-</div>
-
-<div class="card">
-
-<h1>30%</h1>
-
-<p>Ecosystem</p>
-
-</div>
-
-<div class="card">
-
-<h1>20%</h1>
-
-<p>Community</p>
-
-</div>
-
-<div class="card">
-
 <h1>10%</h1>
 
-<p>Liquidity</p>
-
-</div>
-
-</div>
-
-</section>
-
 <p>
 
-Tokenized Real Estate
-
-Treasury Assets
-
-Institutional Securities
-
-</p>
-
-</div>
-
-<div class="card">
-<h3>Community</h3>
-<p>20%</p>
-</div>
-
-<div class="card">
-<h3>Liquidity</h3>
-<p>10%</p>
-</div>
-
-</div>
-
-</section>  
-  
-</h2>
-
-<div class="ecosystem-grid">
-
-<div class="card" id="rwa">
-
-<h3>RWA Layer</h3>
-
-<ul>
-
-<li>Real Estate</li>
-
-<li>Commodities</li>
-
-<li>Treasury Assets</li>
-
-<li>Institutional Assets</li>
-
-</ul>
-
-</div>
-
-<div class="card" id="defi">
-
-<h3>DeFi Layer</h3>
-
-<ul>
-
-<li>Staking</li>
-
-<li>Lending</li>
-
-<li>Yield Strategies</li>
-
-<li>Liquidity</li>
-
-</ul>
-
-</div>
-
-<div class="card">
-
-<h3>Governance</h3>
-
-<ul>
-
-<li>DAO</li>
-
-<li>Treasury</li>
-
-<li>Voting</li>
-
-<li>Community</li>
-
-</ul>
-
-</div>
-
-</div>
-
-</section>
-
-<section class="team">
-
-<h2>Core Infrastructure</h2>
-
-<div class="feature-grid">
-
-<div class="card">
-
-<h3>Smart Contracts</h3>
-
-<p>
-
-Secure ERC20 infrastructure powered by OpenZeppelin.
-
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>RWA Layer</h3>
-
-<p>
-
-Real Estate, Treasury and Institutional Assets.
-
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>DeFi Layer</h3>
-
-<p>
-
-Staking, Lending and Yield Strategies.
-
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>DAO Governance</h3>
-
-<p>
-
-Community driven ecosystem.
-
-</p>
-
-</div>
-
-</div>
-
-</section>
-
-<section class="faq">
-
-<h2>FAQ</h2>
-
-<div class="card">
-
-<h3>What is AKASHIC?</h3>
-
-<p>
-
-AKASHIC is a Real World Assets infrastructure protocol powered by OPN Network.
-
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>What is AKA token?</h3>
-
-<p>
-
-AKA is the native utility and governance token.
-
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>Which network does AKASHIC use?</h3>
-
-<p>
-
-OPN Network Testnet.
-
-</p>
-
-</div>
-
-</section>
-  
-<!-- Features -->
-
-<section class="features">
-
-<h2>
-
-Core Infrastructure
-
-</h2>
-
-<div class="feature-grid">
-
-<div class="card">
-
-<h3>Smart Contracts</h3>
-
-<p>
-
-Secure and transparent blockchain infrastructure.
-
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>RWA Infrastructure</h3>
-
-<p>
-
-Tokenization of real world assets.
-
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>Governance</h3>
-
-<p>
-
-DAO and treasury management.
-
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>Scalability</h3>
-
-<p>
-
-Powered by OPN Network.
+Liquidity
 
 </p>
 
@@ -812,29 +325,31 @@ Powered by OPN Network.
 
 <!-- Roadmap -->
 
-<section id="roadmap">
+<section
+class="roadmap"
+id="roadmap">
 
 <h2>
 
 Roadmap
 
-<section>
-
-<h2>Roadmap</h2>
+</h2>
 
 <div class="cards">
 
 <div class="card">
 
-<h3>2025</h3>
+<h3>
+
+2025
+
+</h3>
 
 <p>
 
-✓ AKA Launch
-
-✓ OPN Testnet
-
-✓ Website V2
+AKA Token <br>
+Website V2 <br>
+OPN Testnet
 
 </p>
 
@@ -842,31 +357,35 @@ Roadmap
 
 <div class="card">
 
-<h3>2026</h3>
+<h3>
+
+2026
+
+</h3>
 
 <p>
 
-Staking
-
+Staking <br>
+Bridge <br>
 DAO
 
-Bridge
-
 </p>
 
 </div>
 
 <div class="card">
 
-<h3>2027</h3>
+<h3>
+
+2027
+
+</h3>
 
 <p>
 
-Marketplace
-
-AI Agent
-
-Institutional Assets
+Marketplace <br>
+Institutional Assets <br>
+AI Layer
 
 </p>
 
@@ -876,45 +395,67 @@ Institutional Assets
 
 </section>
 
+<!-- FAQ -->
+
+<section
+class="faq"
+id="faq">
+
+<h2>
+
+FAQ
+
 </h2>
 
-<div class="roadmap-grid">
-
 <div class="card">
 
-<h3>2025</h3>
+<h3>
 
-<p>✓ AKA Token</p>
+What is AKASHIC?
 
-<p>✓ OPN Deployment</p>
+</h3>
 
-<p>✓ GitHub Launch</p>
+<p>
+
+AKASHIC is a Real World Assets infrastructure protocol powered by OPN Network.
+
+</p>
 
 </div>
 
-<div class="card">
-
-<h3>2026</h3>
-
-<p>✓ Staking</p>
-
-<p>✓ Treasury</p>
-
-<p>✓ RWA Marketplace</p>
-
-</div>
+<br>
 
 <div class="card">
 
-<h3>2027</h3>
+<h3>
 
-<p>✓ Cross-chain</p>
+What is AKA Token?
 
-<p>✓ DAO Governance</p>
+</h3>
 
-<p>✓ Institutional Assets</p>
+<p>
+
+AKA is the utility and governance token of the ecosystem.
+
+</p>
 
 </div>
+
+<br>
+
+<div class="card">
+
+<h3>
+
+Which network does AKASHIC use?
+
+</h3>
+
+<p>
+
+OPN Testnet (Chain ID 984)
+
+</p>
 
 </div>
 
@@ -932,165 +473,8 @@ AKASHIC
 
 <p>
 
-Real World Assets Infrastructure
-
-</p>
-
-<p>
-
-Powered by OPN Network
-
-</p>
-
-</footer>
-
-<script src="script.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-  
-</body> 
-<section class="dashboard">
-
-<h2>Protocol Dashboard</h2>
-
-<div class="cards">
-
-<div class="card">
-
-<h3>Wallet</h3>
-
-<p id="walletAddress">
-
-Not Connected
-
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>AKA Balance</h3>
-
-<p id="tokenBalance">
-
-0 AKA
-
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>Total Supply</h3>
-
-<p id="totalSupply">
-
-Loading...
-
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>Owner</h3>
-
-<p id="ownerAddress">
-
-Loading...
-
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>Network</h3>
-
-<p>
-
-OPN Testnet
-
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>Chain ID</h3>
-
-<p>
-
-984
-
-</p>
-
-</div>
-
-</div>
-
-</section>
-    
-<div class="bg-orb orb1"></div>
-<div class="bg-orb orb2"></div>
-<div class="bg-orb orb3"></div>
-    
-<div id="tsparticles"></div>
-
-<section class="transfer">
-
-<h2>Transfer AKA</h2>
-
-<div class="card">
-
-<input
-id="receiver"
-type="text"
-placeholder="Recipient Address">
-
-<input
-id="amount"
-type="number"
-placeholder="Amount">
-
-<button
-onclick="transferToken()">
-
-Transfer
-
-</button>
-
-</div>
-
-</section>
-
-<section class="mint">
-
-<h2>Mint Token</h2>
-
-<div class="card">
-
-<input
-id="mintAddress"
-type="text"
-placeholder="Address">
-
-<input
-id="mintAmount"
-type="number"
-placeholder="Amount">
-
-<button
-onclick="mintToken()">
-
-Mint
-
-<footer>
-
-<h2>AKASHIC</h2>
-
-<p>
 Infrastructure Layer for Real World Assets
+
 </p>
 
 <p>
@@ -1106,12 +490,9 @@ Powered by OPN Network
 </p>
 
 </footer>
-</button>
 
-</div>
+<script src="script.js"></script>
 
-</section>
-  
+</body>
 
 </html>
-```
