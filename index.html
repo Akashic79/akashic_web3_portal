@@ -1,122 +1,415 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AKASHIC</title>
+
+<title>AKASHIC | Real World Assets Infrastructure</title>
 
 <link rel="stylesheet" href="style.css">
 
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
+
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+
 </head>
 
 <body>
 
+<!-- Background -->
+<div class="gradient-bg"></div>
+
+<!-- Navbar -->
+
 <nav>
-<div class="logo">AKASHIC</div>
+
+<div class="logo">
+
+AKASHIC
+
+</div>
 
 <ul>
-<li>RWA</li>
-<li>DeFi</li>
-<li>Token</li>
-<li>Roadmap</li>
+
+<li><a href="#ecosystem">Ecosystem</a></li>
+
+<li><a href="#rwa">RWA</a></li>
+
+<li><a href="#defi">DeFi</a></li>
+
+<li><a href="#roadmap">Roadmap</a></li>
+
+<li><a href="#token">Token</a></li>
+
 </ul>
 
 <button id="connectButton">
+
 Connect Wallet
+
 </button>
+
 </nav>
+
+<!-- Hero -->
 
 <section class="hero">
 
 <h1>
-Real World Assets Infrastructure
-for the Next Financial Era
+
+Building the Future of
+<br>
+Real World Assets
+
 </h1>
 
 <p>
-Tokenize. Govern. Scale.
+
+Tokenize • Govern • Scale
+
+<br><br>
+
 Powered by OPN Network
+
 </p>
+
+<div class="hero-buttons">
+
+<a class="primary-btn">
+
+Launch App
+
+</a>
+
+<a class="secondary-btn">
+
+Whitepaper
+
+</a>
+
+</div>
 
 </section>
 
-<section class="dashboard">
+<!-- Statistics -->
+
+<section class="stats">
+
+<div class="stat-card">
+
+<h2>$500M+</h2>
+
+<p>Assets Tokenized</p>
+
+</div>
+
+<div class="stat-card">
+
+<h2>100K+</h2>
+
+<p>Community Members</p>
+
+</div>
+
+<div class="stat-card">
+
+<h2>50+</h2>
+
+<p>Partners</p>
+
+</div>
+
+<div class="stat-card">
+
+<h2>100%</h2>
+
+<p>Transparency</p>
+
+</div>
+
+</section>
+
+<!-- Dashboard -->
+
+<section class="dashboard" id="token">
+
+<h2>
+
+AKASHIC Dashboard
+
+</h2>
+
+<div class="dashboard-grid">
 
 <div class="card">
 
-<h2>Wallet</h2>
+<h3>Wallet</h3>
 
 <p id="walletAddress">
+
 Not Connected
+
 </p>
 
 </div>
 
 <div class="card">
 
-<h2>AKA Balance</h2>
+<h3>AKA Balance</h3>
 
 <p id="tokenBalance">
+
 0
+
 </p>
 
 </div>
 
 <div class="card">
 
-<h2>Total Supply</h2>
+<h3>Total Supply</h3>
 
 <p id="totalSupply">
+
 Loading...
+
 </p>
 
 </div>
 
 <div class="card">
 
-<h2>Owner</h2>
+<h3>Owner</h3>
 
 <p id="ownerAddress">
+
 Loading...
+
 </p>
 
 </div>
 
+</div>
+
 </section>
 
-<section class="ecosystem">
+<!-- Ecosystem -->
 
-<h2>Ecosystem</h2>
+<section id="ecosystem">
 
-<div class="grid">
+<h2>
 
-<div class="card">
+Ecosystem
+
+</h2>
+
+<div class="ecosystem-grid">
+
+<div class="card" id="rwa">
+
 <h3>RWA Layer</h3>
-<p>Real Estate</p>
-<p>Commodities</p>
-<p>Financial Assets</p>
+
+<ul>
+
+<li>Real Estate</li>
+
+<li>Commodities</li>
+
+<li>Treasury Assets</li>
+
+<li>Institutional Assets</li>
+
+</ul>
+
 </div>
 
-<div class="card">
+<div class="card" id="defi">
+
 <h3>DeFi Layer</h3>
-<p>Staking</p>
-<p>Lending</p>
-<p>Yield</p>
+
+<ul>
+
+<li>Staking</li>
+
+<li>Lending</li>
+
+<li>Yield Strategies</li>
+
+<li>Liquidity</li>
+
+</ul>
+
 </div>
 
 <div class="card">
+
 <h3>Governance</h3>
-<p>DAO</p>
-<p>Treasury</p>
-<p>Voting</p>
+
+<ul>
+
+<li>DAO</li>
+
+<li>Treasury</li>
+
+<li>Voting</li>
+
+<li>Community</li>
+
+</ul>
+
 </div>
 
 </div>
 
 </section>
+
+<!-- Features -->
+
+<section class="features">
+
+<h2>
+
+Core Infrastructure
+
+</h2>
+
+<div class="feature-grid">
+
+<div class="card">
+
+<h3>Smart Contracts</h3>
+
+<p>
+
+Secure and transparent blockchain infrastructure.
+
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>RWA Infrastructure</h3>
+
+<p>
+
+Tokenization of real world assets.
+
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>Governance</h3>
+
+<p>
+
+DAO and treasury management.
+
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>Scalability</h3>
+
+<p>
+
+Powered by OPN Network.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Roadmap -->
+
+<section id="roadmap">
+
+<h2>
+
+Roadmap
+
+</h2>
+
+<div class="roadmap-grid">
+
+<div class="card">
+
+<h3>2025</h3>
+
+<p>✓ AKA Token</p>
+
+<p>✓ OPN Deployment</p>
+
+<p>✓ GitHub Launch</p>
+
+</div>
+
+<div class="card">
+
+<h3>2026</h3>
+
+<p>✓ Staking</p>
+
+<p>✓ Treasury</p>
+
+<p>✓ RWA Marketplace</p>
+
+</div>
+
+<div class="card">
+
+<h3>2027</h3>
+
+<p>✓ Cross-chain</p>
+
+<p>✓ DAO Governance</p>
+
+<p>✓ Institutional Assets</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Footer -->
+
+<footer>
+
+<h2>
+
+AKASHIC
+
+</h2>
+
+<p>
+
+Real World Assets Infrastructure
+
+</p>
+
+<p>
+
+Powered by OPN Network
+
+</p>
+
+</footer>
 
 <script src="script.js"></script>
 
 </body>
 </html>
+```
