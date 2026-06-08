@@ -11,16 +11,15 @@ const CONTRACT_ADDRESS =
 const ABI = [
 
 "function name() view returns(string)",
-
 "function symbol() view returns(string)",
-
 "function decimals() view returns(uint8)",
-
 "function totalSupply() view returns(uint256)",
-
 "function balanceOf(address) view returns(uint256)",
+"function owner() view returns(address)",
 
-"function owner() view returns(address)"
+"function transfer(address,uint256) returns(bool)",
+
+"function mint(address,uint256)"
 
 ];
 
@@ -284,6 +283,96 @@ links:{
 enable:true,
 distance:150,
 opacity:0.3
+}
+
+}
+
+async function transferToken(){
+
+try{
+
+const to =
+document.getElementById(
+"receiver"
+).value;
+
+const amount =
+document.getElementById(
+"amount"
+).value;
+
+const decimals =
+await contract.decimals();
+
+const contractSigner =
+contract.connect(signer);
+
+const tx =
+await contractSigner.transfer(
+
+to,
+
+ethers.utils.parseUnits(
+amount,
+decimals
+)
+
+);
+
+await tx.wait();
+
+alert("Transfer Success");
+
+}
+
+catch(error){
+
+console.log(error);
+
+}
+
+async function mintToken(){
+
+try{
+
+const to =
+document.getElementById(
+"mintAddress"
+).value;
+
+const amount =
+document.getElementById(
+"mintAmount"
+).value;
+
+const decimals =
+await contract.decimals();
+
+const contractSigner =
+contract.connect(signer);
+
+const tx =
+await contractSigner.mint(
+
+to,
+
+ethers.utils.parseUnits(
+amount,
+decimals
+)
+
+);
+
+await tx.wait();
+
+alert("Mint Success");
+
+}
+
+catch(error){
+
+console.log(error);
+
 }
 
 }
