@@ -66,11 +66,15 @@ async function connectWallet() {
 
 }
 
-        if(network.chainId !== 984){
+const network = await provider.getNetwork();
 
-            alert(
-                "Please switch to OPN Testnet (Chain ID 984)"
-            );
+if(network.chainId !== 984){
+
+alert(
+"Please switch to OPN Testnet"
+);
+
+}
 
         }
 
