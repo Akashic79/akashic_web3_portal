@@ -31,43 +31,40 @@ let contract;
 // Connect Wallet
 // =============================
 
-async function connectWallet(){
+async function connectWallet() {
 
-    if(!window.ethereum){
-
-        alert(
-            "Please install MetaMask"
-        );
-
+    if (!window.ethereum) {
+        alert("Please install MetaMask");
         return;
     }
 
-    try{
+    try {
 
-        provider =
-        new ethers.providers.Web3Provider(
-            window.ethereum
-        );
+        provider = new ethers.providers.Web3Provider(window.ethereum);
 
         await provider.send(
             "eth_requestAccounts",
             []
         );
 
-        signer =
-        provider.getSigner();
+        signer = provider.getSigner();
 
         const address =
-        await signer.getAddress();
+            await signer.getAddress();
 
         document.getElementById(
             "walletAddress"
-        ).innerText =
-        shortenAddress(address);
+        ).innerHTML = address;
 
-        // kiểm tra network
-        const network =
-        await provider.getNetwork();
+    }
+
+    catch (error) {
+
+        console.log(error);
+
+    }
+
+}
 
         if(network.chainId !== 984){
 
