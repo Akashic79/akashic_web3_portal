@@ -32,18 +32,16 @@ z-index:-1;
 /* Navbar */
 
 nav{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-padding:25px 8%;
 display:flex;
 justify-content:space-between;
 align-items:center;
-backdrop-filter:blur(20px);
-background:rgba(5,8,22,.6);
-border-bottom:1px solid rgba(255,255,255,.05);
-z-index:999;
+}
+
+#connectButton{
+min-width:180px;
+height:50px;
+border-radius:15px;
+background:linear-gradient(135deg,#00d4ff,#7c3aed);
 }
 
 .logo{
