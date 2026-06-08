@@ -246,19 +246,11 @@ window.addEventListener(
 // =============================
 
 document
-
-.getElementById(
-    "connectButton"
-)
-
+.getElementById("connectButton")
 .addEventListener(
-
-    "click",
-
-    connectWallet
-
+"click",
+connectWallet
 );
-
 tsParticles.load("tsparticles",{
 
 particles:{
